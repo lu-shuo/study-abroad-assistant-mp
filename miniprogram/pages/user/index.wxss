@@ -1,0 +1,27 @@
+/* pages/user/index.wxss */
+.header {
+  margin-bottom: 20rpx!important;
+}
+.title-wrapper {
+  display: flex;
+  align-items: center;
+}
+.motto-wrapper {
+  margin-left: 40rpx;
+  font-size: 40rpx;
+  font-weight: 400;
+}
+.init-button {
+  width: 100%;
+  background: white;
+  border: none;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+  line-height: 1.3;
+  font-size: 40rpx;
+}
+.init-button::before {
+  border: none;
+  border-radius: 0;
+}

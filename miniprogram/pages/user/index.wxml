@@ -1,0 +1,30 @@
+<!--pages/user/index.wxml-->
+<view class="container">
+  <van-cell-group inset custom-class="header">
+    <van-cell size="large">
+      <view slot="title" class="title-wrapper">
+        <van-image
+          fill="cover"
+          round
+          width="128rpx"
+          height="128rpx"
+          src="{{userInfo.avatarUrl}}"
+        />
+        <block wx:if="{{!hasUserInfo}}">
+          <view class="motto-wrapper">
+            <view wx:if="{{canIUseGetUserProfile}}" bindtap="getUserProfile"> 点击获取头像昵称 </view>
+            <button wx:elif="{{canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo" class="init-button"> 点击获取头像昵称 </button>
+            <view wx:else> 请使用1.4.4及以上版本基础库 </view>
+          </view>
+        </block>
+        <view class="motto-wrapper" wx:else>
+          {{userInfo.nickName}}
+        </view>
+      </view>
+    </van-cell>
+  </van-cell-group>
+  <van-cell-group inset>
+    <van-cell title="单元格" value="内容" size="large"/>
+    <van-cell title="单元格" value="内容" label="描述信息" size="large"/>
+  </van-cell-group>
+</view>
