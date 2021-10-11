@@ -1,30 +1,49 @@
 <!--pages/user/index.wxml-->
 <view class="container">
-  <van-cell-group inset custom-class="header">
-    <van-cell size="large">
-      <view slot="title" class="title-wrapper">
-        <van-image
-          fill="cover"
-          round
-          width="128rpx"
-          height="128rpx"
-          src="{{userInfo.avatarUrl}}"
-        />
-        <block wx:if="{{!hasUserInfo}}">
-          <view class="motto-wrapper">
-            <view wx:if="{{canIUseGetUserProfile}}" bindtap="getUserProfile"> 点击获取头像昵称 </view>
-            <button wx:elif="{{canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo" class="init-button"> 点击获取头像昵称 </button>
-            <view wx:else> 请使用1.4.4及以上版本基础库 </view>
+  <block wx:if="{{hasUserInfo}}">
+    <van-cell-group inset custom-class="header">
+      <van-cell size="large">
+        <view slot="title" class="title-wrapper">
+          <van-image
+            fill="cover"
+            round
+            width="128rpx"
+            height="128rpx"
+            src="{{userInfo.avatarUrl}}"
+          />
+          <!-- <block wx:if="{{!hasUserInfo}}">
+            <view class="name-wrapper">
+              <view wx:if="{{canIUseGetUserProfile}}" bindtap="getUserProfile"> 点击获取头像昵称 </view>
+              <button wx:elif="{{canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo" class="init-button"> 点击获取头像昵称 </button>
+              <view wx:else> 请使用1.4.4及以上版本基础库 </view>
+            </view>
+          </block> -->
+          <view class="name-wrapper">
+            {{userInfo.nickName}}
           </view>
-        </block>
-        <view class="motto-wrapper" wx:else>
-          {{userInfo.nickName}}
         </view>
+      </van-cell>
+    </van-cell-group>
+    <van-cell-group inset>
+      <van-cell title="性别" value="{{userInfo.gender ? '男': '女'}}" size="large"/>
+      <van-cell title="地区" value="{{userInfo.country + ' ' + userInfo.province+' ' + userInfo.city}}" size="large"/>
+      <van-cell title="我的大学" value="待完善" size="large"/>
+      <van-cell title="毕业时间" value="待完善" size="large"/>
+      <van-cell title="意向留学院校" value="待完善" size="large"/>
+    </van-cell-group>
+    <van-button round bind:click="onLogout" size="normal" custom-class="logout-btn">退出登录</van-button>
+  </block>
+  <block wx:else>
+    <view class="login-wrapper">
+      <view class="header">
+        <view class="motto">留学小助手</view>
+        <image class="bg-ware" src="../../images/bg_wave.gif"></image>
       </view>
-    </van-cell>
-  </van-cell-group>
-  <van-cell-group inset>
-    <van-cell title="单元格" value="内容" size="large"/>
-    <van-cell title="单元格" value="内容" label="描述信息" size="large"/>
-  </van-cell-group>
+      <view class="body">
+        <van-button wx:if="{{canIUseGetUserProfile}}"  bind:click="getUserProfile" round color="linear-gradient(to bottom, #56ccf2, #2f80ed)" custom-class="login-btn">微信授权登录</van-button>
+        <van-button wx:elif="{{canIUse}}" open-type="getUserInfo" bind:getuserinfo="getUserInfo" round size="large" color="linear-gradient(to bottom, #56ccf2, #2f80ed)" custom-class="login-btn"> 微信授权登录 </van-button>
+        <view wx:else> 请使用1.4.4及以上版本基础库 </view>
+      </view>
+    </view>
+  </block>
 </view>
