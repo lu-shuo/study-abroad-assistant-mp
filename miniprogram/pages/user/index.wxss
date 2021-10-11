@@ -53,6 +53,9 @@
   justify-content: center;
   align-items: center;
 }
+.not-cell-value {
+  color: #2f80ed!important;
+}
 .container {
   height: 100vh;
   position: relative;
