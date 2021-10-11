@@ -26,8 +26,9 @@ exports.login = async (event, context) => {
         avatar,
         gender: null,
         location: null,
-        school: null,
+        university: null,
         graduateTime: null,
+        intendedUniversity: null,
         lastLoginTime: new Date(),
       }
     })
@@ -54,7 +55,7 @@ exports.login = async (event, context) => {
 }
 
 exports.fillInfo = async (event, context) => {
-  const { gender, location, school, graduateTime } = event
+  const { gender, location, university, graduateTime, intendedUniversity } = event
   const { OPENID } = event.userInfo
   try {
     const result = await user.where({
@@ -64,8 +65,9 @@ exports.fillInfo = async (event, context) => {
       data: {
         gender,
         location,
-        school,
-        graduateTime
+        university,
+        graduateTime,
+        intendedUniversity
       },
     })
     return { code: 0, result }

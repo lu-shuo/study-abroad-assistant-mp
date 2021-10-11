@@ -11,13 +11,6 @@
             height="128rpx"
             src="{{userInfo.avatarUrl}}"
           />
-          <!-- <block wx:if="{{!hasUserInfo}}">
-            <view class="name-wrapper">
-              <view wx:if="{{canIUseGetUserProfile}}" bindtap="getUserProfile"> 点击获取头像昵称 </view>
-              <button wx:elif="{{canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo" class="init-button"> 点击获取头像昵称 </button>
-              <view wx:else> 请使用1.4.4及以上版本基础库 </view>
-            </view>
-          </block> -->
           <view class="name-wrapper">
             {{userInfo.nickName}}
           </view>
@@ -25,11 +18,11 @@
       </van-cell>
     </van-cell-group>
     <van-cell-group inset>
-      <van-cell title="性别" value="{{userInfo.gender ? '男': '女'}}" size="large"/>
-      <van-cell title="地区" value="{{userInfo.country + ' ' + userInfo.province+' ' + userInfo.city}}" size="large"/>
-      <van-cell title="我的大学" value="待完善" size="large"/>
-      <van-cell title="毕业时间" value="待完善" size="large"/>
-      <van-cell title="意向留学院校" value="待完善" size="large"/>
+      <van-cell title="性别" value="{{userInfo.gender || '待完善'}}" size="large" value-class="cell-value"/>
+      <van-cell title="地区" value="{{userInfo.location || '待完善'}}" size="large" value-class="cell-value"/>
+      <van-cell title="我的大学" value="{{userInfo.school || '待完善'}}" size="large" value-class="cell-value"/>
+      <van-cell title="毕业时间" value="{{userInfo.graduateTime || '待完善'}}" size="large" value-class="cell-value"/>
+      <van-cell title="意向留学院校" value="{{userInfo.intendedUniversity || '待完善'}}" size="large" value-class="cell-value"/>
     </van-cell-group>
     <van-button round bind:click="onLogout" size="normal" custom-class="logout-btn">退出登录</van-button>
   </block>
