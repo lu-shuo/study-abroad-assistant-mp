@@ -8,6 +8,7 @@
     "van-image": "@vant/weapp/image/index"
   },
   "pages": [
+    "pages/login/index",
     "pages/user/index",
     "pages/admin/index",
     "pages/estimate/index",

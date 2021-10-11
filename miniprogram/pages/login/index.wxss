@@ -1,0 +1,38 @@
+/* pages/login/index.wxss */
+.container {
+  height: 100vh;
+  position: relative;
+}
+.header {
+  position: relative;
+  height: 40vh;
+  background: linear-gradient(to bottom, #56ccf2, #2f80ed);
+  top: -10rpx;
+}
+.motto {
+  position: absolute;
+  left:50%;    /* 定位父级的50% */
+  top:50%;
+  transform: translate(-50%,-50%); /*自己的50% */
+  color: white;
+  font-size: 50rpx;
+}
+.bg-ware {
+  position: absolute;
+  left: 0;
+  bottom: -2rpx;
+  width: 100%;
+  mix-blend-mode: screen;
+  height: 120rpx;
+}
+.body {
+  height: 60vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.login-btn {
+  font-size: 13pt!important;
+  width: 75vw!important;
+}

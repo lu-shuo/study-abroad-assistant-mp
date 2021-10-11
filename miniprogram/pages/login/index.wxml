@@ -1,0 +1,12 @@
+<!--pages/login/index.wxml-->
+<view class="container">
+  <view class="header">
+    <view class="motto">留学小助手</view>
+    <image class="bg-ware" src="../../images/bg_wave.gif"></image>
+  </view>
+  <view class="body">
+    <van-button wx:if="{{canIUseGetUserProfile}}"  bind:click="getUserProfile" loading="{{loading}}" round color="linear-gradient(to bottom, #56ccf2, #2f80ed)" custom-class="login-btn">微信授权登录</van-button>
+    <van-button wx:elif="{{canIUse}}" open-type="getUserInfo" bind:getuserinfo="getUserInfo" round size="large" color="linear-gradient(to bottom, #56ccf2, #2f80ed)" custom-class="login-btn"> 微信授权登录 </van-button>
+    <view wx:else> 请使用1.4.4及以上版本基础库 </view>
+  </view>
+</view>

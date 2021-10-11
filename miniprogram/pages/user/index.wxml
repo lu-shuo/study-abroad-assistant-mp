@@ -1,42 +1,27 @@
 <!--pages/user/index.wxml-->
 <view class="container">
-  <block wx:if="{{hasUserInfo}}">
-    <van-cell-group inset custom-class="header">
-      <van-cell size="large">
-        <view slot="title" class="title-wrapper">
-          <van-image
-            fill="cover"
-            round
-            width="128rpx"
-            height="128rpx"
-            src="{{userInfo.avatarUrl}}"
-          />
-          <view class="name-wrapper">
-            {{userInfo.nickName}}
-          </view>
+  <van-cell-group inset custom-class="header">
+    <van-cell size="large">
+      <view slot="title" class="title-wrapper">
+        <van-image
+          fill="cover"
+          round
+          width="128rpx"
+          height="128rpx"
+          src="{{userInfo.avatarUrl}}"
+        />
+        <view class="name-wrapper">
+          {{userInfo.nickName}}
         </view>
-      </van-cell>
-    </van-cell-group>
-    <van-cell-group inset>
-      <van-cell title="性别" value="{{userInfo.gender || '待完善'}}" size="large" value-class="{{userInfo.gender ? '' : 'not-cell-value'}}"/>
-      <van-cell title="地区" value="{{userInfo.location || '待完善'}}" size="large" value-class="{{userInfo.location ? '' : 'not-cell-value'}}"/>
-      <van-cell title="我的大学" value="{{userInfo.university || '待完善'}}" size="large" value-class="{{userInfo.university ? '' : 'not-cell-value'}}"/>
-      <van-cell title="毕业时间" value="{{userInfo.graduateTime || '待完善'}}" size="large" value-class="{{userInfo.graduateTime ? '' : 'not-cell-value'}}"/>
-      <van-cell title="意向留学院校" value="{{userInfo.intendedUniversity || '待完善'}}" size="large" value-class="{{userInfo.intendedUniversity ? '' : 'not-cell-value'}}"/>
-    </van-cell-group>
-    <van-button round bind:click="onLogout" size="normal" custom-class="logout-btn">退出登录</van-button>
-  </block>
-  <block wx:else>
-    <view class="login-wrapper">
-      <view class="header">
-        <view class="motto">留学小助手</view>
-        <image class="bg-ware" src="../../images/bg_wave.gif"></image>
       </view>
-      <view class="body">
-        <van-button wx:if="{{canIUseGetUserProfile}}"  bind:click="getUserProfile" round color="linear-gradient(to bottom, #56ccf2, #2f80ed)" custom-class="login-btn">微信授权登录</van-button>
-        <van-button wx:elif="{{canIUse}}" open-type="getUserInfo" bind:getuserinfo="getUserInfo" round size="large" color="linear-gradient(to bottom, #56ccf2, #2f80ed)" custom-class="login-btn"> 微信授权登录 </van-button>
-        <view wx:else> 请使用1.4.4及以上版本基础库 </view>
-      </view>
-    </view>
-  </block>
+    </van-cell>
+  </van-cell-group>
+  <van-cell-group inset>
+    <van-cell title="性别" value="{{userInfo.gender || '待完善'}}" size="large" value-class="{{userInfo.gender ? '' : 'not-cell-value'}}"/>
+    <van-cell title="地区" value="{{userInfo.location || '待完善'}}" size="large" value-class="{{userInfo.location ? '' : 'not-cell-value'}}"/>
+    <van-cell title="在读院校" value="{{userInfo.university || '待完善'}}" size="large" value-class="{{userInfo.university ? '' : 'not-cell-value'}}"/>
+    <van-cell title="毕业时间" value="{{userInfo.graduateTime || '待完善'}}" size="large" value-class="{{userInfo.graduateTime ? '' : 'not-cell-value'}}"/>
+    <van-cell title="意向留学院校" value="{{userInfo.intendedUniversity || '待完善'}}" size="large" value-class="{{userInfo.intendedUniversity ? '' : 'not-cell-value'}}"/>
+  </van-cell-group>
+  <van-button round bind:click="onLogout" size="normal" custom-class="logout-btn">退出登录</van-button>
 </view>

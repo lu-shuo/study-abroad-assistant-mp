@@ -13,43 +13,52 @@ const user = db.collection('user')
 exports.login = async (event, context) => {
   const { OPENID, APPID, UNIONID } = cloud.getWXContext()
 
-  const { nickName, avatar } = event
+  const { nickName, avatarUrl } = event
+
+  let isFirst
 
   try {
-    const result = await user.add({
-      // data 字段表示需新增的 JSON 数据
-      data: {
-        _id: OPENID,
-        APPID,
-        UNIONID,
-        nickName,
-        avatar,
-        gender: null,
-        location: null,
-        university: null,
-        graduateTime: null,
-        intendedUniversity: null,
-        lastLoginTime: new Date(),
-      }
-    })
+    const res = await user.where({
+      _id: OPENID
+    }).get()
+    // 不存在
+    if (res.data.length === 0) {
+      isFirst = true
+      await user.add({
+        // data 字段表示需新增的 JSON 数据
+        data: {
+          _id: OPENID,
+          APPID,
+          UNIONID,
+          nickName,
+          avatarUrl,
+          gender: null,
+          location: null,
+          university: null,
+          graduateTime: null,
+          intendedUniversity: null,
+          lastLoginTime: new Date(),
+        }
+      })
+    } else {
+      isFirst = false
+      await user.doc(OPENID).update({
+        data: {
+          // 表示将 done 字段置为 true
+          lastLoginTime: new Date()
+        },
+      })
+    }
+    const userInfo = await user.doc(OPENID).get()
     return {
       code: 0,
-      isFirst: true,
-      result
+      isFirst,
+      result: userInfo
     }
   } catch (error) {
-    try {
-      const userInfo = await user.doc(OPENID).get()
-      return {
-        code: 0,
-        isFirst: false,
-        result: userInfo
-      }
-    } catch (error) {
-      return {
-        code: 1,
-        error
-      }
+    return {
+      code: 1,
+      error
     }
   }
 }

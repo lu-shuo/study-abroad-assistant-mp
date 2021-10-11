@@ -1,5 +1,6 @@
 /* pages/user/index.wxss */
 .header {
+  margin-top: 20rpx!important;
   margin-bottom: 20rpx!important;
 }
 .title-wrapper {
@@ -11,59 +12,6 @@
   font-size: 40rpx;
   font-weight: 400;
 }
-.init-button {
-  width: 100%;
-  background: white;
-  border: none;
-  text-align: center;
-  padding: 0;
-  margin: 0;
-  line-height: 1.3;
-  font-size: 40rpx;
-}
-.init-button::before {
-  border: none;
-  border-radius: 0;
-}
-.login-wrapper>.header {
-  position: relative;
-  height: 40vh;
-  background: linear-gradient(to bottom, #56ccf2, #2f80ed);
-}
-.motto {
-  position: absolute;
-  left:50%;    /* 定位父级的50% */
-  top:50%;
-  transform: translate(-50%,-50%); /*自己的50% */
-  color: white;
-  font-size: 50rpx;
-}
-.bg-ware {
-  position: absolute;
-  left: 0;
-  bottom: -2rpx;
-  width: 100%;
-  mix-blend-mode: screen;
-  height: 120rpx;
-}
-.login-wrapper>.body {
-  height: 60vh;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.not-cell-value {
-  color: #2f80ed!important;
-}
-.container {
-  height: 100vh;
-  position: relative;
-}
-.login-btn {
-  font-size: 13pt!important;
-  width: 75vw!important;
-}
 .logout-btn {
   position: absolute!important;
   bottom: 40rpx;
@@ -73,4 +21,7 @@
   color: white!important;
   font-size: 13pt!important;
   width: 75vw!important;
+}
+.not-cell-value {
+  color: #2f80ed!important
 }

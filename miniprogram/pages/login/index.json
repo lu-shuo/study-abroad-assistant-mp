@@ -1,0 +1,7 @@
+{
+  "usingComponents": {},
+  "backgroundColor": "#56ccf2",
+  "navigationBarBackgroundColor": "#56ccf2",
+  "navigationBarTitleText": "登陆",
+  "disableScroll": true
+}
