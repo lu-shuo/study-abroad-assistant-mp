@@ -1,4 +1,5 @@
 <!--pages/user/index.wxml-->
+<wxs module="dateUtil" src="../../utils/index.wxs"></wxs>
 <view class="container">
   <van-cell-group inset custom-class="header">
     <van-cell size="large" center>
@@ -14,20 +15,101 @@
           {{userInfo.nickName}}
         </view>
       </view>
-      <van-button round size="small" icon="edit" bind:click="onEditUserInfo">编辑资料</van-button>
+      <van-button round size="small" icon="edit" bind:click="onEdit" wx:if="{{!edit}}">编辑资料</van-button>
+      <van-button round size="small" icon="edit" bind:click="onSave" wx:else>保存</van-button>
     </van-cell>
   </van-cell-group>
-  <van-cell-group inset>
-    <van-cell
-      title="性别"
-      value="{{userInfo.gender || '待完善'}}"
-      size="large"
-      value-class="{{userInfo.gender ? '' : 'not-cell-value'}}"
-    />
-    <van-cell title="生日" value="{{userInfo.birthday || '待完善'}}" size="large" value-class="{{userInfo.location ? '' : 'not-cell-value'}}"/>
-    <van-cell title="在读院校" value="{{userInfo.university || '待完善'}}" size="large" value-class="{{userInfo.university ? '' : 'not-cell-value'}}"/>
-    <van-cell title="毕业时间" value="{{userInfo.graduateTime || '待完善'}}" size="large" value-class="{{userInfo.graduateTime ? '' : 'not-cell-value'}}"/>
-    <van-cell title="意向留学院校" value="{{userInfo.intendedUniversity || '待完善'}}" size="large" value-class="{{userInfo.intendedUniversity ? '' : 'not-cell-value'}}"/>
-  </van-cell-group>
+  <block wx:if="{{!edit}}">
+    <van-cell-group inset>
+      <van-cell
+        title="性别"
+        value="{{userInfo.gender || '待完善'}}"
+        size="large"
+        value-class="{{userInfo.gender ? '' : 'not-cell-value'}}"
+      />
+      <van-cell
+        title="生日"
+        value="{{userInfo.birthday ? dateUtil.dateFormat(userInfo.birthday, 'yyyy-MM-dd') : '待完善'}}"
+        size="large"
+        value-class="{{userInfo.birthday ? '' : 'not-cell-value'}}"
+      />
+      <van-cell
+        title="在读院校"
+        value="{{userInfo.university || '待完善'}}"
+        size="large"
+        value-class="{{userInfo.university ? '' : 'not-cell-value'}}"
+      />
+      <van-cell
+        title="毕业时间"
+        value="{{userInfo.graduateTime ? dateUtil.dateFormat(userInfo.graduateTime, 'yyyy-MM-dd') : '待完善'}}"
+        size="large"
+        value-class="{{userInfo.graduateTime ? '' : 'not-cell-value'}}"
+      />
+      <van-cell
+        title="意向留学院校"
+        value="{{userInfo.intendedUniversity || '待完善'}}"
+        size="large"
+        value-class="{{userInfo.intendedUniversity ? '' : 'not-cell-value'}}"
+      />
+    </van-cell-group>
+  </block>
+  <block wx:else>
+    <van-cell-group inset>
+      <van-cell
+        title="性别"
+        value="{{userInfo.gender || '请选择'}}"
+        size="large"
+        value-class="{{userInfo.gender ? '' : 'not-cell-value'}}"
+        is-link
+        link-type="navigateTo"
+        url="/pages/edit/index?type=gender"
+      />
+      <van-cell
+        title="生日"
+        value="{{userInfo.birthday ? dateUtil.dateFormat(userInfo.birthday, 'yyyy-MM-dd') : '请选择'}}"
+        size="large"
+        value-class="{{userInfo.birthday ? '' : 'not-cell-value'}}"
+        is-link
+        bind:click="onShowTimePicker"
+        data-type="birthday"
+      />
+      <van-cell
+        title="在读院校"
+        value="请填写"
+        size="large"
+        value-class="not-cell-value"
+        is-link
+        link-type="navigateTo"
+        url="/pages/edit/index?type=university"
+      />
+      <van-cell
+        title="毕业时间"
+        value="{{userInfo.graduateTime ? dateUtil.dateFormat(userInfo.graduateTime, 'yyyy-MM-dd') : '请选择'}}"
+        size="large"
+        value-class="{{userInfo.graduateTime ? '' : 'not-cell-value'}}"
+        is-link
+        bind:click="onShowTimePicker"
+        data-type="graduateTime"
+      />
+      <van-cell
+        title="意向留学院校"
+        value="请选择"
+        size="large"
+        value-class="not-cell-value"
+        is-link
+        link-type="navigateTo"
+        url="/pages/edit/index?type=intendedUniversity"
+      />
+    </van-cell-group>
+  </block>
+  <van-datetime-picker
+    wx:if="{{showTimePicker}}"
+    class="timePicker"
+    type="date"
+    value="{{ currentDate }}"
+    bind:confirm="onTimePickerConfirm"
+    min-date="{{ minDate }}"
+    formatter="{{ formatter }}"
+  />
   <van-button round bind:click="onLogout" size="normal" custom-class="logout-btn">退出登录</van-button>
 </view>

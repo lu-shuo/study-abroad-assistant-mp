@@ -1,3 +1,45 @@
 <!--pages/edit/index.wxml-->
 <view class="container">
+  <block wx:if="{{type==='gender'}}">
+    <van-radio-group value="{{ userInfo.gender }}" bind:change="onChange" style="width: 100%;">
+      <van-cell-group inset size="large">
+        <van-cell title="男" clickable data-name="男" bind:click="onClick">
+          <van-radio slot="right-icon" name="男" />
+        </van-cell>
+        <van-cell title="女" clickable data-name="女" bind:click="onClick">
+          <van-radio slot="right-icon" name="女" />
+        </van-cell>
+      </van-cell-group>
+    </van-radio-group>
+  </block>
+  <block wx:elif="{{type==='university'}}">
+    <van-cell-group inset size="large" style="width: 100%;">
+      <van-field
+        model:value="{{ userInfo.university }}"
+        placeholder="请输入大学名称"
+        border="{{ false }}"
+        bind:change="onInputChange"
+        use-button-slot
+      >
+        <van-button slot="button" size="small" round bind:click="onSaveInput">
+          保存
+        </van-button>
+      </van-field>
+    </van-cell-group>
+  </block>
+  <block wx:elif="{{type==='intendedUniversity'}}">
+    <van-cell-group inset size="large" style="width: 100%;">
+      <van-field
+        model:value="{{ userInfo.intendedUniversity }}"
+        placeholder="请输入意向留学院校"
+        border="{{ false }}"
+        bind:change="onChange"
+        use-button-slot
+      >
+        <van-button slot="button" size="small" round bind:click="onSaveInput">
+          保存
+        </van-button>
+      </van-field>
+    </van-cell-group>
+  </block>
 </view>

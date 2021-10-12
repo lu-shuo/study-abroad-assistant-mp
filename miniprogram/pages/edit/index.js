@@ -1,36 +1,71 @@
 // pages/edit/index.js
+const TITLE_MAP = {
+  'gender': '性别',
+  'birthday': '生日',
+  'university': '我的大学',
+  'graduateTime': '毕业时间',
+  'intendedUniversity': '意向留学院校',
+}
 Page({
 
     /**
      * 页面的初始数据
      */
     data: {
-      radio: 1,
-      userInfo: {}
+      type: '',
+      userInfo: {},
     },
 
     /**
      * 生命周期函数--监听页面加载
      */
     onLoad: function (options) {
-      const userInfo = getApp().globalData.userInfo;
-      this.setData({
-        userInfo
-      })
+      const { type } = options
+      this.setData({ type })
     },
 
+    onChange(event) {
+      this.setData({
+        ['userInfo.gender']: event.detail,
+      });
+      // console.log(this.data.userInfo)
+    },
+  
+    onClick(event) {
+      const { name } = event.currentTarget.dataset;
+      this.setData({
+        ['userInfo.gender']: name,
+      });
+      wx.setStorageSync('userInfo', this.data.userInfo)
+      wx.navigateBack({
+        delta: 1,
+      })
+      // console.log(this.data.userInfo)
+    },
+
+    onSaveInput() {
+      wx.setStorageSync('userInfo', this.data.userInfo)
+      wx.navigateBack({
+        delta: 1,
+      })
+    },
     /**
      * 生命周期函数--监听页面初次渲染完成
      */
     onReady: function () {
-
+      wx.setNavigationBarTitle({ title: TITLE_MAP[this.data.type]})
     },
 
     /**
      * 生命周期函数--监听页面显示
      */
     onShow: function () {
-
+      const userInfo = wx.getStorageSync('userInfo')
+      if (userInfo) {
+        this.setData({
+          userInfo: userInfo,
+        })
+      }
     },
 
     /**
