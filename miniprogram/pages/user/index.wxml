@@ -1,7 +1,7 @@
 <!--pages/user/index.wxml-->
 <view class="container">
   <van-cell-group inset custom-class="header">
-    <van-cell size="large">
+    <van-cell size="large" center>
       <view slot="title" class="title-wrapper">
         <van-image
           fill="cover"
@@ -14,11 +14,17 @@
           {{userInfo.nickName}}
         </view>
       </view>
+      <van-button round size="small" icon="edit" bind:click="onEditUserInfo">编辑资料</van-button>
     </van-cell>
   </van-cell-group>
   <van-cell-group inset>
-    <van-cell title="性别" value="{{userInfo.gender || '待完善'}}" size="large" value-class="{{userInfo.gender ? '' : 'not-cell-value'}}"/>
-    <van-cell title="地区" value="{{userInfo.location || '待完善'}}" size="large" value-class="{{userInfo.location ? '' : 'not-cell-value'}}"/>
+    <van-cell
+      title="性别"
+      value="{{userInfo.gender || '待完善'}}"
+      size="large"
+      value-class="{{userInfo.gender ? '' : 'not-cell-value'}}"
+    />
+    <van-cell title="生日" value="{{userInfo.birthday || '待完善'}}" size="large" value-class="{{userInfo.location ? '' : 'not-cell-value'}}"/>
     <van-cell title="在读院校" value="{{userInfo.university || '待完善'}}" size="large" value-class="{{userInfo.university ? '' : 'not-cell-value'}}"/>
     <van-cell title="毕业时间" value="{{userInfo.graduateTime || '待完善'}}" size="large" value-class="{{userInfo.graduateTime ? '' : 'not-cell-value'}}"/>
     <van-cell title="意向留学院校" value="{{userInfo.intendedUniversity || '待完善'}}" size="large" value-class="{{userInfo.intendedUniversity ? '' : 'not-cell-value'}}"/>

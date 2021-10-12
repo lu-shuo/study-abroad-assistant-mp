@@ -33,7 +33,7 @@ exports.login = async (event, context) => {
           nickName,
           avatarUrl,
           gender: null,
-          location: null,
+          birthday: null,
           university: null,
           graduateTime: null,
           intendedUniversity: null,
@@ -73,7 +73,7 @@ exports.fillInfo = async (event, context) => {
     .update({
       data: {
         gender,
-        location,
+        birthday,
         university,
         graduateTime,
         intendedUniversity

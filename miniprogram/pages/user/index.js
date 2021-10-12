@@ -15,6 +15,7 @@ Page({
    */
   onLoad: function (options) {
     const userInfo = wx.getStorageSync('userInfo')
+    console.log(userInfo)
     if (userInfo) {
       this.setData({
         userInfo: userInfo,
@@ -22,7 +23,12 @@ Page({
       })
     }
   },
-
+  onEditUserInfo() {
+    getApp().globalData.userInfo = this.data.userInfo
+    wx.navigateTo({
+      url: '/pages/edit/index',
+    })
+  },
   onLogout() {
     this.setData({
       userInfo: {},
