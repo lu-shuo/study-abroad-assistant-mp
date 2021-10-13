@@ -61,8 +61,8 @@
         size="large"
         value-class="{{userInfo.gender ? '' : 'not-cell-value'}}"
         is-link
-        link-type="navigateTo"
-        url="/pages/edit/index?type=gender"
+        bind:click="jumpToEdit"
+        data-type="gender"
       />
       <van-cell
         title="生日"
@@ -75,12 +75,12 @@
       />
       <van-cell
         title="在读院校"
-        value="请填写"
+        value="{{userInfo.university || '请输入'}}"
         size="large"
-        value-class="not-cell-value"
+        value-class="{{userInfo.university ? '' : 'not-cell-value'}}"
         is-link
-        link-type="navigateTo"
-        url="/pages/edit/index?type=university"
+        bind:click="jumpToEdit"
+        data-type="university"
       />
       <van-cell
         title="毕业时间"
@@ -93,12 +93,12 @@
       />
       <van-cell
         title="意向留学院校"
-        value="请选择"
+        value="{{userInfo.intendedUniversity || '请输入'}}"
         size="large"
-        value-class="not-cell-value"
+        value-class="{{userInfo.intendedUniversity ? '' : 'not-cell-value'}}"
         is-link
-        link-type="navigateTo"
-        url="/pages/edit/index?type=intendedUniversity"
+        bind:click="jumpToEdit"
+        data-type="university"
       />
     </van-cell-group>
   </block>

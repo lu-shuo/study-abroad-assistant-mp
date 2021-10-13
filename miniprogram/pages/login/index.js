@@ -45,7 +45,6 @@ Page({
         nickName: userInfo.nickName,
         avatarUrl: userInfo.avatarUrl
       })
-      console.log(res)
       if (res.code === 0) {
         if (isFirst) {
           wx.setStorageSync('userInfo', res.result.data)

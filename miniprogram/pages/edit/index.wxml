@@ -1,12 +1,12 @@
 <!--pages/edit/index.wxml-->
 <view class="container">
   <block wx:if="{{type==='gender'}}">
-    <van-radio-group value="{{ userInfo.gender }}" bind:change="onChange" style="width: 100%;">
+    <van-radio-group value="{{ userInfo.gender }}" bind:change="onRadioChange" style="width: 100%;">
       <van-cell-group inset size="large">
-        <van-cell title="男" clickable data-name="男" bind:click="onClick">
+        <van-cell title="男" clickable data-name="男" bind:click="onRadioClick">
           <van-radio slot="right-icon" name="男" />
         </van-cell>
-        <van-cell title="女" clickable data-name="女" bind:click="onClick">
+        <van-cell title="女" clickable data-name="女" bind:click="onRadioClick">
           <van-radio slot="right-icon" name="女" />
         </van-cell>
       </van-cell-group>
@@ -15,9 +15,10 @@
   <block wx:elif="{{type==='university'}}">
     <van-cell-group inset size="large" style="width: 100%;">
       <van-field
-        model:value="{{ userInfo.university }}"
+      value="{{ userInfo.university }}"
         placeholder="请输入大学名称"
         border="{{ false }}"
+        data-type="university"
         bind:change="onInputChange"
         use-button-slot
       >
@@ -30,10 +31,11 @@
   <block wx:elif="{{type==='intendedUniversity'}}">
     <van-cell-group inset size="large" style="width: 100%;">
       <van-field
-        model:value="{{ userInfo.intendedUniversity }}"
+        value="{{ userInfo.intendedUniversity }}"
         placeholder="请输入意向留学院校"
         border="{{ false }}"
-        bind:change="onChange"
+        data-type="intendedUniversity"
+        bind:change="onInputChange"
         use-button-slot
       >
         <van-button slot="button" size="small" round bind:click="onSaveInput">

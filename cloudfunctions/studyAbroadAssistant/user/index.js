@@ -63,13 +63,11 @@ exports.login = async (event, context) => {
   }
 }
 
-exports.fillInfo = async (event, context) => {
-  const { gender, location, university, graduateTime, intendedUniversity } = event
-  const { OPENID } = event.userInfo
+exports.updateInfo = async (event, context) => {
+  const { _id, gender, birthday, university, graduateTime, intendedUniversity } = event.userInfo
+  console.log(gender, birthday, university, graduateTime, intendedUniversity, _id)
   try {
-    const result = await user.where({
-      _id: OPENID
-    })
+    const result = await user.doc(_id)
     .update({
       data: {
         gender,

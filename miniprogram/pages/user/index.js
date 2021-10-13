@@ -58,8 +58,18 @@ Page({
   onEdit() {
     this.setData({ edit: true })
   },
-  onSave() {
+  async onSave() {
     this.setData({ edit: false })
+    this.setUserInfo()
+    try {
+      const res = await requestCloud('studyAbroadAssistant', {
+        type: 'updateUserInfo',
+        userInfo: this.data.userInfo
+      })
+      console.log(res)
+    } catch (error) {
+      console.error(error)
+    }
   },
   onShowTimePicker(e) {
     const type = e.currentTarget.dataset.type
@@ -79,8 +89,6 @@ Page({
         ['userInfo.graduateTime']: event.detail,
       });
     }
-    this.setUserInfo()
-    // console.log(this.formatTime(event.detail), typeof this.formatTime(event.detail))
   },
   onLogout() {
     this.setData({
@@ -92,7 +100,20 @@ Page({
       url: '../login/index'
     })
   },
-
+  jumpToEdit(e) {
+    const type = e.currentTarget.dataset.type
+    const { userInfo} = this.data
+    wx.navigateTo({
+      url: '/page/edit/index',
+      success: res => {
+        // 这里给要打开的页面传递数据.  第一个参数:方法key, 第二个参数:需要传递的数据
+        res.eventChannel.emit('setUserInfoAndType', {
+          type,
+          userInfo
+        })
+      }
+    })
+  },
   /**
    * 生命周期函数--监听页面隐藏
    */

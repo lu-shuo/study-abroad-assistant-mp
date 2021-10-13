@@ -5,5 +5,7 @@ exports.main = async (event, context) => {
   switch (event.type) {
     case 'login':
       return await user.login(event, context)
+    case 'updateUserInfo':
+      return await user.updateInfo(event, context)
   }
 }

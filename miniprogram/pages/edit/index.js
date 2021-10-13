@@ -20,18 +20,36 @@ Page({
      * 生命周期函数--监听页面加载
      */
     onLoad: function (options) {
-      const { type } = options
-      this.setData({ type })
+      let eventChannel = this.getOpenerEventChannel()
+      // 事件名和上个页面设置的相同即可
+      eventChannel.on('setUserInfoAndType', ({ type, userInfo }) => {
+        this.setData({  
+          type: type || '',
+          userInfo: userInfo || {}
+        })
+      })
+    },
+    /**
+     * 生命周期函数--监听页面显示
+     */
+    onShow: function () {
+      
+    },
+    /**
+     * 生命周期函数--监听页面初次渲染完成
+     */
+    onReady: function () {
+      wx.setNavigationBarTitle({ title: TITLE_MAP[this.data.type]})
     },
 
-    onChange(event) {
+    onRadioChange(event) {
       this.setData({
         ['userInfo.gender']: event.detail,
       });
       // console.log(this.data.userInfo)
     },
   
-    onClick(event) {
+    onRadioClick(event) {
       const { name } = event.currentTarget.dataset;
       this.setData({
         ['userInfo.gender']: name,
@@ -43,30 +61,27 @@ Page({
       // console.log(this.data.userInfo)
     },
 
+    onInputChange(event) {
+      const { type } = event.currentTarget.dataset;
+      if (type === 'university') {
+        this.setData({
+          ['userInfo.university']: event.detail
+        })
+      } else if (type === 'intendedUniversity') {
+        this.setData({
+          ['userInfo.intendedUniversity']: event.detail
+        })
+      }
+      
+    },
     onSaveInput() {
       wx.setStorageSync('userInfo', this.data.userInfo)
       wx.navigateBack({
         delta: 1,
       })
     },
-    /**
-     * 生命周期函数--监听页面初次渲染完成
-     */
-    onReady: function () {
-      wx.setNavigationBarTitle({ title: TITLE_MAP[this.data.type]})
-    },
+    
 
-    /**
-     * 生命周期函数--监听页面显示
-     */
-    onShow: function () {
-      const userInfo = wx.getStorageSync('userInfo')
-      if (userInfo) {
-        this.setData({
-          userInfo: userInfo,
-        })
-      }
-    },
 
     /**
      * 生命周期函数--监听页面隐藏
