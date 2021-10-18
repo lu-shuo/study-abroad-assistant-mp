@@ -5,14 +5,29 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    questionInfo: {},
+    loading: false,
   },
-
+  async getQuestionInfo() {
+    this.setData({loading: true})
+    try {
+      const res = await wx.$requestCloud('studyAbroadAssistant', {
+        type: 'getQuestionnaireInfo',
+        name: '留学择校评估问卷'
+      })
+      this.setData({
+        questionInfo: res.result.list[0]
+      })
+    } catch (error) {
+      console.error(error)
+    }
+    this.setData({loading: false})
+  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    this.getQuestionInfo()
   },
 
   /**

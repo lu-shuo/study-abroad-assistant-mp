@@ -1,4 +1,6 @@
 // pages/estimate/index.js
+const { requestCloud } = require('../../utils/request')
+
 Page({
 
   /**
@@ -7,7 +9,17 @@ Page({
   data: {
 
   },
-
+  async getQuestionInfo() {
+    try {
+      const res = await requestCloud('studyAbroadAssistant', {
+        type: 'getQuestionnaireInfo',
+        name: '留学择校评估问卷'
+      })
+      console.log(res)
+    } catch (error) {
+      console.error(error)
+    }
+  },
   /**
    * 生命周期函数--监听页面加载
    */

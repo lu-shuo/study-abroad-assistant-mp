@@ -1,2 +1,19 @@
 <!--pages/questionnaire/index.wxml-->
-<text>pages/questionnaire/index.wxml</text>
+<view class="container">
+  <van-loading wx:if="{{loading}}" type="spinner" color="#2f80ed" size="50" custom-class="van-loading"/>
+  <block wx:else>
+    <view class="header">
+      <van-cell-group inset>
+        <van-cell title="{{questionInfo.name}}">
+          <view>
+            1/15
+          </view>
+        </van-cell>
+      </van-cell-group>
+    </view>
+    <view class="body">
+      
+    </view>
+  </block>
+</view>
+  
