@@ -5,6 +5,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    saving: false,
     hasUserInfo: false,
     userInfo: {},
     edit: false,
@@ -29,6 +30,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    this.initUserInfo();
   },
   /**
    * 生命周期函数--监听页面初次渲染完成
@@ -41,7 +43,6 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    this.initUserInfo();
   },
   initUserInfo() {
     const userInfo = wx.getStorageSync('userInfo')
@@ -59,7 +60,7 @@ Page({
     this.setData({ edit: true })
   },
   async onSave() {
-    this.setData({ edit: false })
+    this.setData({ saving: true })
     this.setUserInfo()
     try {
       const res = await requestCloud('studyAbroadAssistant', {
@@ -67,8 +68,10 @@ Page({
         userInfo: this.data.userInfo
       })
       console.log(res)
+      this.setData({ edit: false, saving: false })
     } catch (error) {
       console.error(error)
+      this.setData({ saving: false })
     }
   },
   onShowTimePicker(e) {
@@ -102,16 +105,25 @@ Page({
   },
   jumpToEdit(e) {
     const type = e.currentTarget.dataset.type
-    const { userInfo} = this.data
+    const { userInfo } = this.data
     wx.navigateTo({
-      url: '/page/edit/index',
+      url: '/pages/edit/index',
       success: res => {
         // 这里给要打开的页面传递数据.  第一个参数:方法key, 第二个参数:需要传递的数据
         res.eventChannel.emit('setUserInfoAndType', {
           type,
           userInfo
         })
-      }
+      },
+      events: {
+        // 这里用来接收后面页面传递回来的数据
+        updateUserInfo: (newVal) => {
+          // 这里处理数据即可
+          this.setData({
+            userInfo: Object.assign(userInfo, newVal)
+          })
+        }
+      } 
     })
   },
   /**

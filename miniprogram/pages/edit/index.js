@@ -20,9 +20,10 @@ Page({
      * 生命周期函数--监听页面加载
      */
     onLoad: function (options) {
-      let eventChannel = this.getOpenerEventChannel()
+      const eventChannel = this.getOpenerEventChannel()
       // 事件名和上个页面设置的相同即可
       eventChannel.on('setUserInfoAndType', ({ type, userInfo }) => {
+        console.log(type)
         this.setData({  
           type: type || '',
           userInfo: userInfo || {}
@@ -46,19 +47,16 @@ Page({
       this.setData({
         ['userInfo.gender']: event.detail,
       });
-      // console.log(this.data.userInfo)
     },
   
     onRadioClick(event) {
+      const eventChannel = this.getOpenerEventChannel()
       const { name } = event.currentTarget.dataset;
       this.setData({
         ['userInfo.gender']: name,
       });
-      wx.setStorageSync('userInfo', this.data.userInfo)
-      wx.navigateBack({
-        delta: 1,
-      })
-      // console.log(this.data.userInfo)
+      eventChannel.emit('updateUserInfo', this.data.userInfo)
+      wx.navigateBack()
     },
 
     onInputChange(event) {
@@ -75,10 +73,9 @@ Page({
       
     },
     onSaveInput() {
-      wx.setStorageSync('userInfo', this.data.userInfo)
-      wx.navigateBack({
-        delta: 1,
-      })
+      const eventChannel = this.getOpenerEventChannel()
+      eventChannel.emit('updateUserInfo', this.data.userInfo)
+      wx.navigateBack()
     },
     
 

@@ -20,7 +20,7 @@ Page({
     const userInfo = wx.getStorageSync('userInfo')
     if (userInfo) {
       wx.switchTab({
-        url: '/pages/user/index',
+        url: '/pages/estimate/index',
         success: () => {
           this.login(userInfo, false)
         }
@@ -50,7 +50,7 @@ Page({
           wx.setStorageSync('userInfo', res.result.data)
           this.setData({ loading: false })
           wx.switchTab({
-            url: '/pages/user/index'
+            url: '/pages/estimate/index'
           })
         }
       }

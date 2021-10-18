@@ -16,7 +16,7 @@
         </view>
       </view>
       <van-button round size="small" icon="edit" bind:click="onEdit" wx:if="{{!edit}}">编辑资料</van-button>
-      <van-button round size="small" icon="edit" bind:click="onSave" wx:else>保存</van-button>
+      <van-button round size="small" icon="edit" bind:click="onSave" loading="{{saving}}" wx:else>保存</van-button>
     </van-cell>
   </van-cell-group>
   <block wx:if="{{!edit}}">
@@ -98,7 +98,7 @@
         value-class="{{userInfo.intendedUniversity ? '' : 'not-cell-value'}}"
         is-link
         bind:click="jumpToEdit"
-        data-type="university"
+        data-type="intendedUniversity"
       />
     </van-cell-group>
   </block>

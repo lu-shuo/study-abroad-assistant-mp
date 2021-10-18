@@ -14,11 +14,12 @@
   },
   "pages": [
     "pages/login/index",
-    "pages/user/index",
-    "pages/admin/index",
     "pages/estimate/index",
+    "pages/questionnaire/index",
     "pages/universities/index",
-    "pages/edit/index"
+    "pages/user/index",
+    "pages/edit/index",
+    "pages/admin/index"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",
