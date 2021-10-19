@@ -1,0 +1,14 @@
+<!--pages/questionnaire/components/item/index.wxml-->
+<scroll-view style="height:{{height}}px" scroll-y >
+  <view class="question-wrapper" wx:if="{{index !== null}}">
+    <van-tag plain type="primary">{{item.qType === 0 ? '单选': '多选'}}</van-tag>
+    <view class="content">
+      <view class="title">{{item.title}}</view>
+      <view class="single-option" wx:if="{{item.qType === 0}}">
+        <van-radio-group value="{{ radio }}" bind:change="onChange">
+          <van-radio name="1" wx:for="{{item.options}}" wx:for-item="option" wx:key="index">{{option.content}}</van-radio>
+        </van-radio-group>
+      </view>
+    </view>
+  </view>
+</scroll-view>

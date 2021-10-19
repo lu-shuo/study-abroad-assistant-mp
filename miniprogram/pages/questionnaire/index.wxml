@@ -12,7 +12,14 @@
       </van-cell-group>
     </view>
     <view class="body">
-      
+      <virtual-swiper
+        id="swiper"
+        generic:item-view="item-view"
+        height="{{swiperHeight}}"
+        duration="{{swiperDuration}}"
+        current="{{current}}"
+        list="{{questionInfo.questions}}"
+      />
     </view>
   </block>
 </view>

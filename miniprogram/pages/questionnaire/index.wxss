@@ -1,6 +1,6 @@
 /* pages/questionnaire/index.wxss */
 .container {
-  height: 80vh;
+  height: 100vh;
   position: relative;
 }
 .van-loading {

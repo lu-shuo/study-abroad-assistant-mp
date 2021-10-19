@@ -1,2 +1,12 @@
 <!--components/virtual-swiper/index.wxml-->
-<text>components/virtual-swiper/index.wxml</text>
+<swiper 
+  style="height:{{height}}px" 
+  duration="{{duration}}" 
+  current="{{current}}"
+  height="{{height}}"
+  bindchange="swiperChange"
+>
+  <swiper-item wx:key="_id" wx:for="{{renderList}}">
+    <item-view item="{{item}}" index="{{index}}" height="{{height}}"></item-view>
+  </swiper-item>
+</swiper>
