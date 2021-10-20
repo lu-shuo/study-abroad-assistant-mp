@@ -4,9 +4,11 @@
   <block wx:else>
     <view class="header">
       <van-cell-group inset>
-        <van-cell title="{{questionInfo.name}}">
-          <view>
-            1/15
+        <van-cell title="{{questionInfo.name}}" title-class="questionnaire-name">
+          <view class="question-progress">
+            <view class="total">{{questionInfo.questions.length}}</view>
+            /
+            <view class="current">{{current + 1}}</view>
           </view>
         </van-cell>
       </van-cell-group>

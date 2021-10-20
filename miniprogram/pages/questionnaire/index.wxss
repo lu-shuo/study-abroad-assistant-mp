@@ -3,6 +3,23 @@
   height: 100vh;
   position: relative;
 }
+.questionnaire-name {
+  font-size: 15px;
+}
+.question-progress {
+  display: flex;
+  flex-direction: row-reverse;
+  font-size: 15px;
+}
+.question-progress>.current {
+  color: #2f80ed;
+  font-size: 20px;
+  margin-right: 5px;
+}
+.question-progress>.total {
+  margin-left: 5px;
+}
+
 .van-loading {
   position: absolute!important;
   top: 50%;

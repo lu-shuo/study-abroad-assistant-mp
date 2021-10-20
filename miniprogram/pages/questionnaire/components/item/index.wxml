@@ -5,8 +5,10 @@
     <view class="content">
       <view class="title">{{item.title}}</view>
       <view class="single-option" wx:if="{{item.qType === 0}}">
-        <van-radio-group value="{{ radio }}" bind:change="onChange">
-          <van-radio name="1" wx:for="{{item.options}}" wx:for-item="option" wx:key="index">{{option.content}}</van-radio>
+        <van-radio-group value="{{ select }}" bind:change="onOptionClick">
+          <van-radio name="{{option.index}}" wx:for="{{item.options}}" wx:for-item="option" wx:key="index" custom-class="option">
+            {{option.index}}. {{option.content}}
+          </van-radio>
         </van-radio-group>
       </view>
     </view>

@@ -15,7 +15,7 @@ Page({
    */
   onLoad: function (options) {
     this.setData({
-      swiperHeight: wx.getSystemInfoSync().windowHeight * 0.8,
+      swiperHeight: wx.getSystemInfoSync().windowHeight,
     })
     this.getQuestionInfo()
   },
