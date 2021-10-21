@@ -21,6 +21,7 @@
         duration="{{swiperDuration}}"
         current="{{current}}"
         list="{{questionInfo.questions}}"
+        bind:optionConfirm="handleQuestionConfirm"
       />
     </view>
   </block>

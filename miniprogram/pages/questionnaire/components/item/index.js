@@ -8,7 +8,7 @@ Component({
         type: Number,
         value: 0
       },
-      item: {
+      question: {
         type: Object,
         value: null
       },
@@ -24,17 +24,21 @@ Component({
      * 组件的初始数据
      */
     data: {
-      select: 'A',
+      select: '',
     },
 
     /**
      * 组件的方法列表
      */
     methods: {
-      onOptionClick(event) {
+      onOptionSelect(e) {
         this.setData({
-          select: event.detail,
+          select: e.detail,
         });
+        const { question } = this.data;
+        const { options } = question;
+        const selected = options.find(item => item.index === e.detail)
+        this.triggerEvent('selectOption', { questionId: question._id, selected })
       }
     }
 })

@@ -30,7 +30,7 @@ Component({
     observers: {
       'current': function(current) {
         const renderCurrent = current % VIRTUAL_SWIPER_LENGTH
-        console.log(renderCurrent)
+        // console.log(renderCurrent)
         this.init(renderCurrent)
       },
     },
@@ -57,10 +57,13 @@ Component({
         this.setData({
           renderList: list.slice(startIndex, finalIndex)
         })
-        console.log(this.data.renderList)
+        // console.log(this.data.renderList)
       },
       swiperChange() {
 
       },
+      handleOptionSelect(e) {
+        this.triggerEvent('optionConfirm', e.detail)
+      }
     }
 })

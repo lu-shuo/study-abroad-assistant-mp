@@ -1,11 +1,11 @@
 // pages/questionnaire/index.js
 Page({
-
   /**
    * 页面的初始数据
    */
   data: {
     questionInfo: {},
+    answers: [],
     loading: false,
     swiperDuration: 0,
     current: 0,
@@ -133,6 +133,22 @@ Page({
     this.selectComponent('#swiper').init(0);
     // 恢复swiper动画
     this.setData({ swiperDuration: 500 })
+  },
+  handleQuestionConfirm(e) {
+    // console.log(e.detail)
+    const { answers } = this.data;
+    const { questionId, selected } = e.detail
+    const index = answers.findIndex(item => item.questionId === questionId)
+    console.log(index)
+    if (index === -1) {
+      let tempObj = Object.create(null)
+      tempObj.questionId = questionId
+      tempObj.selected = selected
+      answers.push(tempObj)
+    } else {
+      answers[index].selected = selected
+    }
+    console.log(answers)
   },
 
   /**
