@@ -1,4 +1,6 @@
 // pages/questionnaire/index.js
+const questionInfo = require('../../test/questionnaire')
+
 Page({
   /**
    * 页面的初始数据
@@ -8,7 +10,8 @@ Page({
     answers: [],
     loading: false,
     swiperDuration: 0,
-    current: 0,
+    current: 0, // 跳转的index
+    currentIndex: 0, // 当前的真实index
   },
   /**
    * 生命周期函数--监听页面加载
@@ -29,101 +32,7 @@ Page({
       // })
       this.setData({
         // questionInfo: res.result.list[0]
-        questionInfo: {
-          "_id": "9e7190f1616ce24d008b1cb50dfc9ea8",
-          "name": "留学择校评估问卷",
-          "questions": [
-            {
-              "_id": "83cfc1ac6162b096006f848515561b57",
-              "title": "您所在高校的大学类别（前100且高水平大学，请参照上交软科排名）",
-              "options": [
-                {
-                  "index": "A",
-                  "content": "985",
-                  "smallPoint": 3,
-                  "bigPoint": 10,
-                  "selected": false
-                },
-                {
-                  "index": "B",
-                  "content": "211",
-                  "smallPoint": 2.1,
-                  "bigPoint": 7,
-                  "selected": false
-                },
-                {
-                  "index": "C",
-                  "content": "前100且高水平大学",
-                  "smallPoint": 1.5,
-                  "bigPoint": 5,
-                  "selected": false
-                },
-                {
-                  "index": "D",
-                  "content": "其他普通本科院校",
-                  "smallPoint": 0.6,
-                  "bigPoint": 2,
-                  "selected": false
-                },
-                {
-                  "index": "E",
-                  "content": "民办本科院校",
-                  "smallPoint": 0,
-                  "bigPoint": 0,
-                  "selected": false
-                }
-              ],
-              "qType": 0,
-              "mainSort": "知识",
-              "subSort": "学业表现"
-            },
-            {
-              "_id": "83cfc1ac6162b096006f8486779dd461",
-              "title": "您所在专业入学至今的本科总GPA（注：还未完成本科学业的测试者，建议从学院教学秘书获取）",
-              "options": [
-                {
-                  "index": "A",
-                  "content": "4.0以上",
-                  "smallPoint": 20,
-                  "bigPoint": 90
-                },
-                {
-                  "index": "B",
-                  "content": "3.5-3.9",
-                  "smallPoint": 18,
-                  "bigPoint": 81
-                },
-                {
-                  "index": "C",
-                  "content": "3.0-3.4",
-                  "smallPoint": 16,
-                  "bigPoint": 72
-                },
-                {
-                  "index": "D",
-                  "content": "2.5-2.9",
-                  "smallPoint": 12,
-                  "bigPoint": 54
-                },
-                {
-                  "index": "E",
-                  "content": "2.0-2.4",
-                  "smallPoint": 8,
-                  "bigPoint": 36
-                },
-                {
-                  "index": "F",
-                  "content": "1.0-1.9",
-                  "smallPoint": 4,
-                  "bigPoint": 18
-                }
-              ],
-              "qType": 0,
-              "mainSort": "知识",
-              "subSort": "学业表现"
-            }
-          ]
-        }
+        questionInfo
       })
     } catch (error) {
       console.error(error)
@@ -136,7 +45,7 @@ Page({
   },
   handleQuestionConfirm(e) {
     // console.log(e.detail)
-    const { answers } = this.data;
+    const { answers, current, questionInfo } = this.data;
     const { questionId } = e.detail
     const index = answers.findIndex(item => item.questionId === questionId)
     if (index === -1) {
@@ -144,10 +53,25 @@ Page({
     } else {
       answers[index].selected = e.detail.selected
     }
-    console.log(answers)
+    // 不是最后一题则自动跳转下一题
+    if (current < questionInfo.questions.length - 1) {
+      this.setData({ current: current + 1 })
+    }
+    // console.log(answers)
   },
   handleQuestionChange(e) {
-    this.setData({ current: e.detail.current })
+    // 返回当前的真实index
+    const realIndex = e.detail
+    this.setData({ currentIndex: realIndex })
+    if (realIndex === this.data.questionInfo.questions.length - 1 ) {
+      Dialog.alert({
+        title: '标题',
+        message: '已经到最后一题了',
+        theme: 'round-button',
+      }).then(() => {
+        // on close
+      });
+    }
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

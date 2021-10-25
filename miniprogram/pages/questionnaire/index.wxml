@@ -8,7 +8,7 @@
           <view class="question-progress">
             <view class="total">{{questionInfo.questions.length}}</view>
             /
-            <view class="current">{{current + 1}}</view>
+            <view class="current">{{currentIndex + 1}}</view>
           </view>
         </van-cell>
       </van-cell-group>
@@ -26,5 +26,6 @@
       />
     </view>
   </block>
+  <van-dialog id="van-dialog" />
 </view>
   

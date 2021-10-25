@@ -14,7 +14,7 @@ Component({
         type: Array,
         value: []
       },
-      current: { // 真实的current
+      current: { // 当前索引
         type: Number,
         value: 0
       },
@@ -66,7 +66,8 @@ Component({
         console.log(this.data.renderList)
       },
       swiperChange(e) {
-        this.triggerEvent('swiperChange', e.detail)
+        
+        this.triggerEvent('swiperChange', this.data.renderList[e.detail.current].index)
       },
       handleOptionSelect(e) {
         this.triggerEvent('optionConfirm', e.detail)

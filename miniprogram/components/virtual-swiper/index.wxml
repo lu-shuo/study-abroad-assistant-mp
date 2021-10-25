@@ -7,6 +7,6 @@
   bindchange="swiperChange"
 >
   <swiper-item wx:key="_id" wx:for="{{renderList}}">
-    <item-view question="{{item}}" current="{{current}}" height="{{height}}" bind:selectOption="handleOptionSelect"></item-view>
+    <item-view question="{{item}}" index="{{item.index}}" height="{{height}}" bind:selectOption="handleOptionSelect"></item-view>
   </swiper-item>
 </swiper>

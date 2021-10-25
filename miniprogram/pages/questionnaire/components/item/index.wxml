@@ -13,10 +13,10 @@
             wx:for="{{question.options}}"
             wx:key="index"
             wx:for-item="option"
-            name="{{option.index}}"
+            name="{{option.title}}"
             custom-class="option"
           >
-            {{option.index}}. {{option.content}}
+            {{option.title}}. {{option.content}}
           </van-radio>
         </van-radio-group>
       </view>
