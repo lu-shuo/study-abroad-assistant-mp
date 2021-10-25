@@ -10,11 +10,11 @@ Component({
         type: Number,
         value: 0
       },
-      list: { // swiper渲染列表
+      list: { // 实际数据列表
         type: Array,
         value: []
       },
-      current: { // 当前所在滑块的 index
+      current: { // 真实的current
         type: Number,
         value: 0
       },
@@ -29,17 +29,17 @@ Component({
     },
     observers: {
       'current': function(current) {
-        const renderCurrent = current % VIRTUAL_SWIPER_LENGTH
-        // console.log(renderCurrent)
-        this.init(renderCurrent)
+        // 超过合法范围
+        if (current > this.data.list.length - 1 || current < 0) return
+        // 初始化swiper渲染列表
+        this.init(current)
       },
     },
     /**
      * 组件的初始数据
      */
     data: {
-      // 滑动到的位置
-      swiperIndex: 0,
+      realCurrent: 0, // 实际位置
     // 此值控制swiper的位置
       swiperCurrent: 0, 
       renderList: [] // 当前渲染的数据
@@ -49,18 +49,24 @@ Component({
      * 组件的方法列表
      */
     methods: {
-      init(index) {
+      init(current) {
         const { list } = this.data
         if (!list || !list.length) return
-        const startIndex = (index - 1) < 0 ? 0 : (index - 1)
-        const finalIndex = index + 2
-        this.setData({
-          renderList: list.slice(startIndex, finalIndex)
-        })
-        // console.log(this.data.renderList)
+        if (list.length <= VIRTUAL_SWIPER_LENGTH) {
+          this.setData({ renderList: list })
+          return
+        }
+        let renderList = list.slice(current, current + VIRTUAL_SWIPER_LENGTH)
+        const length = renderList.length
+        if (length < 3) {
+          renderList = list.slice(current - (VIRTUAL_SWIPER_LENGTH - length))
+        }
+        
+        this.setData({ renderList })
+        console.log(this.data.renderList)
       },
-      swiperChange() {
-
+      swiperChange(e) {
+        this.triggerEvent('swiperChange', e.detail)
       },
       handleOptionSelect(e) {
         this.triggerEvent('optionConfirm', e.detail)
