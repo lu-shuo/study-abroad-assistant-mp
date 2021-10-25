@@ -12,7 +12,7 @@ Component({
         type: Object,
         value: null
       },
-      index: {
+      current: {
         type: Number,
         value: null
       }
@@ -35,10 +35,10 @@ Component({
         this.setData({
           select: e.detail,
         });
-        const { question } = this.data;
+        const { question, current } = this.data;
         const { options } = question;
         const selected = options.find(item => item.index === e.detail)
-        this.triggerEvent('selectOption', { questionId: question._id, selected })
+        this.triggerEvent('selectOption', { questionIndex: current, questionId: question._id, selected })
       }
     }
 })

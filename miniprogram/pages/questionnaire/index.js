@@ -137,20 +137,18 @@ Page({
   handleQuestionConfirm(e) {
     // console.log(e.detail)
     const { answers } = this.data;
-    const { questionId, selected } = e.detail
+    const { questionId } = e.detail
     const index = answers.findIndex(item => item.questionId === questionId)
-    console.log(index)
     if (index === -1) {
-      let tempObj = Object.create(null)
-      tempObj.questionId = questionId
-      tempObj.selected = selected
-      answers.push(tempObj)
+      answers.push(e.detail)
     } else {
-      answers[index].selected = selected
+      answers[index].selected = e.detail.selected
     }
     console.log(answers)
   },
-
+  handleQuestionChange(e) {
+    this.setData({ current: e.detail.current })
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
