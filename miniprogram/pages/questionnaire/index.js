@@ -39,7 +39,7 @@ Page({
     }
     this.setData({loading: false})
     // 初始化到上次答题位置
-    this.selectComponent('#swiper').init(0);
+    // this.selectComponent('#swiper').init(0);
     // 恢复swiper动画
     this.setData({ swiperDuration: 500 })
   },
@@ -60,6 +60,7 @@ Page({
     // console.log(answers)
   },
   handleQuestionChange(e) {
+    console.log(e.detail)
     // 返回当前的真实index
     const realIndex = e.detail
     this.setData({ currentIndex: realIndex })

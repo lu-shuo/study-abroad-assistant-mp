@@ -1,12 +1,12 @@
 <!--components/virtual-swiper/index.wxml-->
 <swiper 
-  style="height:{{height}}px" 
+  circular
+  style="height:{{swiperHeight}}px"
   duration="{{duration}}" 
-  current="{{current}}"
-  height="{{height}}"
+  current="{{virtualSwiperCurrent}}"
   bindchange="swiperChange"
 >
-  <swiper-item wx:key="_id" wx:for="{{renderList}}">
+  <swiper-item wx:key="_id" wx:for="{{virtualSwiperList}}">
     <item-view question="{{item}}" index="{{item.index}}" height="{{height}}" bind:selectOption="handleOptionSelect"></item-view>
   </swiper-item>
 </swiper>
