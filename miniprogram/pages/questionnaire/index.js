@@ -10,7 +10,7 @@ Page({
     answers: [],
     loading: false,
     swiperDuration: 0,
-    current: 0, // 跳转的index
+    current: 0, // 初始跳转index
     currentIndex: 0, // 当前的真实index
   },
   /**
@@ -39,7 +39,7 @@ Page({
     }
     this.setData({loading: false})
     // 初始化到上次答题位置
-    // this.selectComponent('#swiper').init(0);
+    this.selectComponent('#swiper').init(0);
     // 恢复swiper动画
     this.setData({ swiperDuration: 500 })
   },
@@ -62,17 +62,17 @@ Page({
   handleQuestionChange(e) {
     console.log(e.detail)
     // 返回当前的真实index
-    const realIndex = e.detail
+    const { current:realIndex } = e.detail
     this.setData({ currentIndex: realIndex })
-    if (realIndex === this.data.questionInfo.questions.length - 1 ) {
-      Dialog.alert({
-        title: '标题',
-        message: '已经到最后一题了',
-        theme: 'round-button',
-      }).then(() => {
-        // on close
-      });
-    }
+    // if (realIndex === this.data.questionInfo.questions.length - 1 ) {
+    //   Dialog.alert({
+    //     title: '标题',
+    //     message: '已经到最后一题了',
+    //     theme: 'round-button',
+    //   }).then(() => {
+    //     // on close
+    //   });
+    // }
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

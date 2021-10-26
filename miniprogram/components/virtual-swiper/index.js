@@ -70,33 +70,24 @@ Component({
      * 组件的方法列表
      */
     methods: {
-      init(realIndex, virtualIndex) {
+      init(realIndex) {
+        console.log('init')
         const { list } = this.data
         if (!list || !list.length) return
-        
+        const virtualIndex = realIndex % VIRTUAL_SWIPER_LENGTH 
         // 初始化虚拟列表
         let virtualList = []
         // 1. 获取当前虚拟索引的真实数据
         virtualList[virtualIndex] = list[realIndex]
-        virtualList[this.getLastVirtualIndex[virtualIndex]] = this.getLastItem(list, realIndex)
-        virtualList[this.getNextVirtualIndex[virtualIndex]] = this.getNextItem(list, realIndex)
+        // 2. 获取前后项数据
+        virtualList[this.getLastVirtualIndex(virtualIndex)] = this.getLastItem(list, realIndex)
+        virtualList[this.getNextVirtualIndex(virtualIndex)] = this.getNextItem(list, realIndex)
+        console.log('[initList]：', virtualList)
         this.setData({
           virtualSwiperIndex: virtualIndex,
           virtualSwiperCurrent: virtualIndex,
           virtualSwiperList: virtualList
         })
-        // if (list.length <= VIRTUAL_SWIPER_LENGTH) {
-        //   this.setData({ renderList: list })
-        //   return
-        // }
-        // let renderList = list.slice(current, current + VIRTUAL_SWIPER_LENGTH)
-        // const length = renderList.length
-        // if (length < 3) {
-        //   renderList = list.slice(current - (VIRTUAL_SWIPER_LENGTH - length))
-        // }
-        
-        // this.setData({ renderList })
-        // console.log(this.data.renderList)
       },
       // 获取上一个虚拟索引
       getLastVirtualIndex(current) {
@@ -118,13 +109,49 @@ Component({
       },
 
       swiperChange(e) {
-        const realIndex = this.data.renderList[e.detail.current].index
-        if (realIndex > 0) {
-          this.setData({ isCircular: true })
-        } else {
-          this.setData({ isCircular: false })
+        const current = e.detail.current
+        const lastIndex = this.data.virtualSwiperIndex
+        console.log('swiperChange', current, lastIndex)
+        const currentItem = this.data.virtualSwiperList[current]
+        const info = { source: e.detail.source }
+        const isForward = (current > lastIndex) || (lastIndex === END && current === START)
+        const isBackward = (current < lastIndex) || (lastIndex === START && current === END)
+        // 正向滑动
+        if (isForward) {
+          // 滑动到最后一个
+          if (currentItem === null) {
+            info.current = this.data.list - 1
+            this.triggerEvent('swiperChange', info)
+            this.setData({
+              virtualSwiperCurrent: lastIndex
+            })
+            return
+          }
+          // 不是真实数据最后一个则更新虚拟列表下一个的值
+          this.setData({
+            [`virtualSwiperList[${this.getNextVirtualIndex(current)}]`]: this.getNextItem(this.data.list, currentItem.index)
+          })
         }
-        this.triggerEvent('swiperChange', this.data.renderList[e.detail.current].index)
+        if (isBackward) {
+          if (currentItem === null) {
+            info.current = 0
+            this.triggerEvent('swiperChange', info)
+            this.setData({
+              virtualSwiperCurrent: lastIndex
+            })
+            return
+          }
+          // 不是真实数据第一个则更新虚拟列表上一个的值
+          this.setData({
+            [`virtualSwiperList[${this.getLastVirtualIndex(current)}]`]: this.getLastItem(this.data.list, currentItem.index)
+          })
+        }
+        console.log('[virtualSwiperList]', this.data.virtualSwiperList)
+        // 更新virtualSwiperIndex值
+        this.setData({ virtualSwiperIndex: current })
+        // 触发事件
+        info.current = currentItem.index
+        this.triggerEvent('swiperChange', info)
       },
       handleOptionSelect(e) {
         this.triggerEvent('optionConfirm', e.detail)
