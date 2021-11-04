@@ -6,7 +6,7 @@
   current="{{virtualSwiperCurrent}}"
   bindchange="swiperChange"
 >
-  <swiper-item wx:for="{{virtualSwiperList}}" wx:key="_id">
+  <swiper-item wx:for="{{virtualSwiperList}}" wx:key="sss">
     <item-view
       question="{{item}}"
       index="{{item.index}}"
@@ -14,7 +14,4 @@
       bind:selectOption="handleOptionSelect"
     ></item-view>
   </swiper-item>
-  <!-- <swiper-item>123</swiper-item>
-  <swiper-item>456</swiper-item>
-  <swiper-item>789</swiper-item> -->
 </swiper>

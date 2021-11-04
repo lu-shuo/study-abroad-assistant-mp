@@ -6,7 +6,7 @@
       <view class="title">{{question.title}}</view>
       <view class="single-option" wx:if="{{question.qType === 0}}">
         <van-radio-group
-          value="{{ select }}"
+          value="{{ question.selected }}"
           bind:change="onOptionSelect"
         >
           <van-radio

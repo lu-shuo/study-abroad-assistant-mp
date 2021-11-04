@@ -54,20 +54,29 @@ Page({
     this.setData({ swiperDuration: 500 })
   },
   handleQuestionConfirm(e) {
-    // console.log(e.detail)
+    console.log(e.detail)
     const { answers, current, questionInfo } = this.data;
-    const { questionId } = e.detail
+    const { questionId, selected } = e.detail
+    questionInfo.questions.forEach((item, index) => {
+      if (item._id === questionId) {
+        questionInfo.questions[index].selected = selected.title
+      }
+    })
     const index = answers.findIndex(item => item.questionId === questionId)
     if (index === -1) {
       answers.push(e.detail)
     } else {
-      answers[index].selected = e.detail.selected
+      answers[index].selected = selected
     }
+    console.log(questionInfo, answers)
+    this.setData({
+      answers,
+      questionInfo
+    })
     // 不是最后一题则自动跳转下一题
     if (current < questionInfo.questions.length - 1) {
       this.setData({ current: current + 1 })
     }
-    console.log(answers)
     if (answers.length === this.data.questionInfo.questions.length) {
       Dialog.alert({
         title: '标题',

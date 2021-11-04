@@ -24,7 +24,7 @@ Component({
      * 组件的初始数据
      */
     data: {
-      select: '',
+      // select: '',
     },
 
     /**
@@ -32,9 +32,9 @@ Component({
      */
     methods: {
       onOptionSelect(e) {
-        this.setData({
-          select: e.detail,
-        });
+        // this.setData({
+        //   select: e.detail,
+        // });
         const { question, index } = this.data;
         const { options } = question;
         const selected = options.find(item => item.title === e.detail)

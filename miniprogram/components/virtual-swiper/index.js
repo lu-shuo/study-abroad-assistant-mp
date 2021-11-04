@@ -71,7 +71,7 @@ Component({
      */
     methods: {
       init(realIndex) {
-        console.log('init')
+        // console.log('init')
         const { list } = this.data
         if (!list || !list.length) return
         const virtualIndex = realIndex % VIRTUAL_SWIPER_LENGTH 
@@ -82,7 +82,7 @@ Component({
         // 2. 获取前后项数据
         virtualList[this.getLastVirtualIndex(virtualIndex)] = this.getLastItem(list, realIndex)
         virtualList[this.getNextVirtualIndex(virtualIndex)] = this.getNextItem(list, realIndex)
-        console.log('[initList]：', virtualList)
+        // console.log('[initList]：', virtualList)
         this.setData({
           virtualSwiperIndex: virtualIndex,
           virtualSwiperCurrent: virtualIndex,

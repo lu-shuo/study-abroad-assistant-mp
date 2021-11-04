@@ -38,6 +38,7 @@ module.exports = {
           "bigPoint": 0,
         }
       ],
+      "selected": "",
       "qType": 0,
       "mainSort": "知识",
       "subSort": "学业表现"
@@ -84,6 +85,7 @@ module.exports = {
           "bigPoint": 18
         }
       ],
+      "selected": "",
       "qType": 0,
       "mainSort": "知识",
       "subSort": "学业表现"
@@ -130,6 +132,7 @@ module.exports = {
           "bigPoint": 18
         }
       ],
+      "selected": "",
       "qType": 0,
       "mainSort": "知识",
       "subSort": "学业表现"
@@ -175,6 +178,7 @@ module.exports = {
           "bigPoint": 18
         }
       ],
+      "selected": "",
       "qType": 0,
       "mainSort": "知识",
       "subSort": "学业表现"
@@ -221,6 +225,7 @@ module.exports = {
           "bigPoint": 18
         }
       ],
+      "selected": "",
       "qType": 0,
       "mainSort": "知识",
       "subSort": "学业表现"
@@ -267,6 +272,7 @@ module.exports = {
           "bigPoint": 18
         }
       ],
+      "selected": "",
       "qType": 0,
       "mainSort": "知识",
       "subSort": "学业表现"
@@ -313,6 +319,7 @@ module.exports = {
           "bigPoint": 18
         }
       ],
+      "selected": "",
       "qType": 0,
       "mainSort": "知识",
       "subSort": "学业表现"
@@ -359,6 +366,7 @@ module.exports = {
           "bigPoint": 18
         }
       ],
+      "selected": "",
       "qType": 0,
       "mainSort": "知识",
       "subSort": "学业表现"
