@@ -24,6 +24,11 @@
         bind:optionConfirm="handleQuestionConfirm"
         bind:swiperChange="handleQuestionChange"
       />
+      <!-- <swiper>
+        <swiper-item>123</swiper-item>
+        <swiper-item>456</swiper-item>
+        <swiper-item>789</swiper-item>
+      </swiper> -->
     </view>
   </block>
   <van-dialog id="van-dialog" />

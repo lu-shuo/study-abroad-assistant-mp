@@ -111,7 +111,6 @@ Component({
       swiperChange(e) {
         const current = e.detail.current
         const lastIndex = this.data.virtualSwiperIndex
-        console.log('swiperChange', current, lastIndex)
         const currentItem = this.data.virtualSwiperList[current]
         const info = { source: e.detail.source }
         const isForward = (current > lastIndex) || (lastIndex === END && current === START)
@@ -146,7 +145,6 @@ Component({
             [`virtualSwiperList[${this.getLastVirtualIndex(current)}]`]: this.getLastItem(this.data.list, currentItem.index)
           })
         }
-        console.log('[virtualSwiperList]', this.data.virtualSwiperList)
         // 更新virtualSwiperIndex值
         this.setData({ virtualSwiperIndex: current })
         // 触发事件

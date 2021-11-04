@@ -1,6 +1,4 @@
-// pages/estimate/index.js
-const { requestCloud } = require('../../utils/request')
-
+// pages/answer/index.js
 Page({
 
   /**
@@ -9,11 +7,7 @@ Page({
   data: {
 
   },
-  startEstimate() {
-    wx.navigateTo({
-      url: '/pages/questionnaire/index',
-    })
-  },
+
   /**
    * 生命周期函数--监听页面加载
    */

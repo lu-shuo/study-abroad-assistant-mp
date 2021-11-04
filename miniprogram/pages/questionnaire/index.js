@@ -1,5 +1,6 @@
 // pages/questionnaire/index.js
 const questionInfo = require('../../test/questionnaire')
+import Dialog from '@vant/weapp/dialog/dialog';
 
 Page({
   /**
@@ -17,6 +18,15 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    wx.enableAlertBeforeUnload({
+      message: "您当前还未完成评估，确认退出？",
+      success: function (res) {
+        console.log("中途退出：", res);
+      },
+      fail: function (errMsg) {
+        console.log("退出失败：", errMsg);
+      },
+    });
     this.setData({
       swiperHeight: wx.getSystemInfoSync().windowHeight,
     })
@@ -57,10 +67,18 @@ Page({
     if (current < questionInfo.questions.length - 1) {
       this.setData({ current: current + 1 })
     }
-    // console.log(answers)
+    console.log(answers)
+    if (answers.length === this.data.questionInfo.questions.length) {
+      Dialog.alert({
+        title: '标题',
+        message: '您已答完问卷，点击确认查看结果',
+        theme: 'round-button',
+      }).then(() => {
+        // on close
+      });
+    }
   },
   handleQuestionChange(e) {
-    console.log(e.detail)
     // 返回当前的真实index
     const { current:realIndex } = e.detail
     this.setData({ currentIndex: realIndex })

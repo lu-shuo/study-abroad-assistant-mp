@@ -1,1 +1,57 @@
 /* pages/estimate/index.wxss */
+.estimate {
+  height: 98vh;
+  position: relative;
+}
+.top-bg {
+  background: rgb(196, 230, 252);
+  width: 100%;
+  height: 30%;
+}
+.top-tip {
+  color: #17abe3;
+  display: inline-block;
+  padding: 20rpx;
+}
+
+.start-btn {
+  margin-top: -75px;
+  width: 300rpx;
+  height: 300rpx;
+  border-radius: 50%;
+  background: #17abe3;
+  color: white;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.start-btn::before {
+  animation: wave 1.5s ease-out infinite;  
+}
+@keyframes wave {
+  50%, 75% {
+    width: 350rpx;
+    height: 350rpx;
+  }
+
+  80%, 100% {
+    opacity: 0;
+  }
+}
+.body-tip {
+  display: inline-block;
+  margin-top: 20rpx;
+  padding: 50rpx;
+  font-size: 16px;
+  line-height: 2em;
+  color: #17abe3;
+}
+.go-record {
+  position: absolute;
+  bottom: 100rpx;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  color: #17abe3;
+}
