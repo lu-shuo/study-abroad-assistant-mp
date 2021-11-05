@@ -1,5 +1,5 @@
 /* pages/estimate/index.wxss */
-.estimate {
+.estimate-container {
   height: 98vh;
   position: relative;
 }

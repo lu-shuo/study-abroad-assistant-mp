@@ -1,5 +1,5 @@
 <!--pages/estimate/index.wxml-->
-<view class="estimate">
+<view class="estimate-container">
   <view class="top-bg">
     <text class="top-tip">留学助手</text>
   </view>

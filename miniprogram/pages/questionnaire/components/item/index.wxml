@@ -1,16 +1,16 @@
 <!--pages/questionnaire/components/item/index.wxml-->
 <scroll-view style="height:{{height}}px" scroll-y >
-  <view class="question-wrapper" wx:if="{{index !== null}}">
-    <van-tag plain type="primary">{{question.qType === 0 ? '单选': '多选'}}</van-tag>
+  <view class="question-wrapper" wx:if="{{info.qType !== -1}}">
+    <van-tag plain type="primary">{{info.qType === 0 ? '单选': '多选'}}</van-tag>
     <view class="content">
-      <view class="title">{{question.title}}</view>
-      <view class="single-option" wx:if="{{question.qType === 0}}">
+      <view class="title">{{info.title}}</view>
+      <view class="single-option" wx:if="{{info.qType === 0}}">
         <van-radio-group
-          value="{{ question.selected }}"
+          value="{{ info.selected }}"
           bind:change="onOptionSelect"
         >
           <van-radio
-            wx:for="{{question.options}}"
+            wx:for="{{info.options}}"
             wx:key="index"
             wx:for-item="option"
             name="{{option.title}}"
@@ -21,5 +21,19 @@
         </van-radio-group>
       </view>
     </view>
+  </view>
+  <view class="record-wrapper" wx:else>
+    <view class="record-box">
+      <view
+        class="record {{item.selected !== null ? 'selected' : ''}}"
+        wx:for="{{info.answers}}"
+        wx:key="index"
+        data-index="{{item.index}}"
+        bindtap="handleRecordClick"
+      >
+        {{index + 1}}
+      </view>
+    </view>
+    <van-button round size="normal" bind:click="confirmAnswer" custom-class="confirm-btn">交卷</van-button>
   </view>
 </scroll-view>

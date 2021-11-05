@@ -1,4 +1,5 @@
 // pages/questionnaire/components/item/index.js
+
 Component({
     /**
      * 组件的属性列表
@@ -8,7 +9,7 @@ Component({
         type: Number,
         value: 0
       },
-      question: {
+      info: {
         type: Object,
         value: null
       },
@@ -24,7 +25,7 @@ Component({
      * 组件的初始数据
      */
     data: {
-      // select: '',
+      
     },
 
     /**
@@ -32,13 +33,16 @@ Component({
      */
     methods: {
       onOptionSelect(e) {
-        // this.setData({
-        //   select: e.detail,
-        // });
-        const { question, index } = this.data;
-        const { options } = question;
-        const selected = options.find(item => item.title === e.detail)
-        this.triggerEvent('selectOption', { questionIndex: index, questionId: question._id, selected })
-      }
+        const { info, index } = this.data;
+        this.triggerEvent('selectOption', { questionIndex: index, questionId: info._id, selected: e.detail })
+      },
+      handleRecordClick(e) {
+        const { index } = e.target.dataset
+        this.triggerEvent('recordClick', { index })
+      },
+      confirmAnswer() {
+        const isFinish = !this.data.info.answers.some(item => item.selected === null);
+        this.triggerEvent('confirmAnswer', { isFinish })
+      },
     }
 })

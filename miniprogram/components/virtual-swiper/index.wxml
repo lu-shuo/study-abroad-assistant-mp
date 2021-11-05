@@ -8,10 +8,12 @@
 >
   <swiper-item wx:for="{{virtualSwiperList}}" wx:key="sss">
     <item-view
-      question="{{item}}"
+      info="{{item}}"
       index="{{item.index}}"
       height="{{height}}"
       bind:selectOption="handleOptionSelect"
+      bind:recordClick="handleRecordClick"
+      bind:confirmAnswer="handleConfirmAnswer"
     ></item-view>
   </swiper-item>
 </swiper>

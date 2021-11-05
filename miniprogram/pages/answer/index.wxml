@@ -1,2 +1,17 @@
 <!--pages/answer/index.wxml-->
-<text>pages/answer/index.wxml</text>
+<view class="answer-container">
+  <van-cell-group inset>
+    <van-cell title="{{questionnaireName}}" title-class="questionnaire-name"  size="large"></van-cell>
+  </van-cell-group>
+  <view class="record-box">
+    <view
+      class="record"
+      wx:key="this"
+      wx:for="{{answers}}"
+      data-index="{{index}}"
+      bindtap="handleRecordClick"
+    >
+      {{index + 1}}
+    </view>
+  </view>
+</view>

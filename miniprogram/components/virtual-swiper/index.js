@@ -53,19 +53,6 @@ Component({
       virtualSwiperList: [] // 当前渲染的数据
     },
 
-    // lifetimes: {
-    //   created: function() {
-        
-    //   },
-    //   attached: function() {
-    //     // 在组件实例进入页面节点树时执行
-    //     this.init(this.data.current)
-    //   },
-    //   detached: function() {
-    //     // 在组件实例被从页面节点树移除时执行
-    //   },
-    // },
-
     /**
      * 组件的方法列表
      */
@@ -119,7 +106,7 @@ Component({
         if (isForward) {
           // 滑动到最后一个
           if (currentItem === null) {
-            info.current = this.data.list - 1
+            info.current = this.data.list.length - 1
             this.triggerEvent('swiperChange', info)
             this.setData({
               virtualSwiperCurrent: lastIndex
@@ -153,6 +140,12 @@ Component({
       },
       handleOptionSelect(e) {
         this.triggerEvent('optionConfirm', e.detail)
+      },
+      handleRecordClick(e) {
+        this.triggerEvent('recordClick', e.detail)
+      },
+      handleConfirmAnswer(e) {
+        this.triggerEvent('confirmAnswer', e.detail)
       }
     }
 })

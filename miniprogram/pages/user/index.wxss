@@ -15,13 +15,14 @@
 .logout-btn {
   position: absolute!important;
   z-index: 1;
-  bottom: 40rpx;
+  bottom: 20rpx;
   left: 50%;
   transform: translate(-50%,-50%); /*自己的50% */
-  background: linear-gradient(to bottom, #56ccf2, #2f80ed)!important;
+  /* background: linear-gradient(to bottom, #56ccf2, #2f80ed)!important; */
+  background-color: #2f80ed!important;
   color: white!important;
   font-size: 13pt!important;
-  width: 75vw!important;
+  width: 90vw!important;
 }
 .not-cell-value {
   color: #2f80ed!important
