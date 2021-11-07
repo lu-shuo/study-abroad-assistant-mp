@@ -15,7 +15,7 @@
 .logout-btn {
   position: absolute!important;
   z-index: 1;
-  bottom: 20rpx;
+  bottom: 40rpx;
   left: 50%;
   transform: translate(-50%,-50%); /*自己的50% */
   /* background: linear-gradient(to bottom, #56ccf2, #2f80ed)!important; */

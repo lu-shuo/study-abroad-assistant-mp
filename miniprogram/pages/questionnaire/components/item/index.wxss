@@ -14,10 +14,17 @@
 }
 .single-option {
   margin-top: 20rpx;
+  padding: 0 20rpx;
   font-size: 20px;
 }
+/* .van-radio__icon {
+  font-size: 30px!important;
+} */
 .option {
   margin: 50rpx 0;
+}
+.radio-label {
+  margin-left: 10rpx;
 }
 .record-wrapper {
   width: 100%;
@@ -43,7 +50,7 @@
   border-radius: 42rpx;
   background-color:#cfd4d8;
   color: #ffffff;
-  margin: 32rpx;
+  margin: 30rpx;
   font-size: 28rpx;
   box-sizing: border-box;
 }

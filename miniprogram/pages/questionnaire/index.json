@@ -3,5 +3,6 @@
     "virtual-swiper": "../../components/virtual-swiper/index",
     "item-view": "./components/item/index"
   },
-  "navigationBarTitleText": "院校评估"
+  "navigationBarTitleText": "院校评估",
+  "disableScroll": true
 }

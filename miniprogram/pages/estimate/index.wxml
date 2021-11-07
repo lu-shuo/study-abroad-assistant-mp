@@ -1,9 +1,9 @@
 <!--pages/estimate/index.wxml-->
 <view class="estimate-container">
   <view class="top-bg">
-    <text class="top-tip">留学助手</text>
+    <text class="top-tip">留学小助手</text>
   </view>
   <button class="start-btn" bindtap="startEstimate">开始评估</button>
   <text class="body-tip">问卷分为多选和单选，答完之后系统会根据您的总得分给出相应的推荐院校，立即开始吧！</text>
-  <view class="go-record"><van-icon name="todo-list-o" />我的评估记录<van-icon name="arrow" /></view>
+  <view class="go-record" bindtap="navigateToRecord"><van-icon name="todo-list-o" />我的评估记录<van-icon name="arrow" /></view>
 </view>

@@ -16,10 +16,11 @@
     "van-dialog": "@vant/weapp/dialog/index"
   },
   "pages": [
-    "pages/questionnaire/index",
     "pages/login/index",
-    "pages/estimate/index",
+    "pages/questionnaire/index",
     "pages/universities/index",
+    "pages/estimate/index",
+    "pages/history/index",
     "pages/user/index",
     "pages/edit/index",
     "pages/admin/index",
@@ -33,14 +34,8 @@
     "navigationBarTextStyle": "black"
   },
   "tabBar": {
-    "selectedColor": "#17abe3",
+    "selectedColor": "#2f80ed",
     "list": [
-      {
-        "text": "管理",
-        "pagePath": "pages/admin/index",
-        "iconPath": "images/tarbar/user-n.png",
-        "selectedIconPath": "images/tarbar/user-y.png"
-      },
       {
         "text": "评估",
         "pagePath": "pages/estimate/index",

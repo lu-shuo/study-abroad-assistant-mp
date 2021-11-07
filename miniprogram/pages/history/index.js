@@ -1,4 +1,4 @@
-// pages/estimate/index.js
+// pages/history/index.js
 const { requestCloud } = require('../../utils/request')
 
 Page({
@@ -7,26 +7,27 @@ Page({
    * 页面的初始数据
    */
   data: {
+    recordInfo: []
+  },
 
-  },
-  startEstimate() {
-    wx.navigateTo({
-      url: '/pages/questionnaire/index',
-    })
-  },
-  navigateToRecord() {
-
-    wx.navigateTo({
-      url: '/pages/history/index',
-    })
-  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    this.getRecord()
   },
-
+  async getRecord() {
+    const userInfo = wx.getStorageSync('userInfo')
+    const { _id } = userInfo
+    const res = await requestCloud('studyAbroadAssistant', {
+      type: 'getRecord',
+      userId: _id
+    })
+    this.setData({
+      recordInfo: res.result.list
+    })
+    console.log(this.data.recordInfo)
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

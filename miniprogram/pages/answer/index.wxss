@@ -1,27 +1,19 @@
 /* pages/answer/index.wxss */
-.questionnaire-name {
-  font-size: 15px;
+.answer-container {
+  height: 98vh;
 }
-.record-box {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 100%;
-  padding: 20rpx;
+.van-cell-group--inset {
+  margin-top: 20rpx!important;
 }
-.record{
-  width: 70rpx;
-  height: 70rpx;
+.cell-title {
+  flex: 2!important;
+  font-size: 16px;
+  height: 100rpx;
   display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  border-width: 2rpx;
-  border-style: solid;
-  border-radius: 42rpx;
-  background-color:#cfd4d8;
-  color: #ffffff;
-  margin: 25rpx;
-  font-size: 28rpx;
-  box-sizing: border-box;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.cell-label {
+  font-size: 16px!important;
+  color: #2f80ed;
 }

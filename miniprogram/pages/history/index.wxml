@@ -1,0 +1,19 @@
+<!--pages/history/index.wxml-->
+<view class="history-container">
+  <van-cell-group
+    inset
+    size="large"
+    wx:for="{{recordInfo}}"
+    wx:key="_id"
+    custom-class="cell-group"
+  >
+    <van-cell
+      title-class="cell-title"
+      label-class="cell-label"
+      value-class="{{item.isFinish ? 'finish' : 'not-finish'}}"
+      title="{{item.questionnaireInfo[0].name}}"
+      value="{{item.isFinish ? '已完成': '未完成'}}"
+      label="大分：{{item.score.bigPoint}}/小分：{{item.score.smallPoint}}"
+    />
+  </van-cell-group>
+</view>

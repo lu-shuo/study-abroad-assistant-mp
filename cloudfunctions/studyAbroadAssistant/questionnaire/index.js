@@ -18,7 +18,7 @@ exports.getQuestionnaireInfo = async (event, context) => {
     .lookup({
       from: 'question',
       let: {
-        queArr: '$questions'
+        queArr: '$questions',
       },
       pipeline: $.pipeline()
         .match(_.expr($.in(['$_id', '$$queArr'])))
@@ -26,6 +26,10 @@ exports.getQuestionnaireInfo = async (event, context) => {
       as: 'questions',
     })
     .end()
+    // TODO
+    result.list[0].questions.forEach((item, index) => {
+      item.index = index
+    })
     return {
       code: 0,
       result

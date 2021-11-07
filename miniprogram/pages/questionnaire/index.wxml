@@ -29,5 +29,6 @@
     </view>
   </block>
   <van-dialog id="van-dialog" />
+  <van-loading wx:if="{{submitLoading}}" type="spinner" color="#2f80ed" size="50" custom-class="van-loading"/>
 </view>
   

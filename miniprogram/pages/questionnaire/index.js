@@ -1,4 +1,5 @@
 // pages/questionnaire/index.js
+const { requestCloud } = require('../../utils/request')
 const questionInfo = require('../../test/questionnaire')
 import Dialog from '@vant/weapp/dialog/dialog';
 
@@ -10,6 +11,7 @@ Page({
     questionInfo: {},
     answers: [],
     loading: false,
+    submitLoading: false,
     swiperDuration: 0,
     current: 0, // 初始跳转index
     currentIndex: 0, // 当前的真实index
@@ -19,7 +21,7 @@ Page({
    */
   onLoad: function (options) {
     wx.enableAlertBeforeUnload({
-      message: "确定退出评估？退出后未完成的评估将会保存在评估历史中",
+      message: "您还未完成评估，确定退出？",
       success: function (res) {
         console.log("未完成退出：", res);
       },
@@ -36,10 +38,12 @@ Page({
     // 拉取问卷详情
     this.setData({loading: true})
     try {
-      // const res = await wx.$requestCloud('studyAbroadAssistant', {
-      //   type: 'getQuestionnaireInfo',
-      //   name: '留学择校评估问卷'
-      // })
+      const res = await requestCloud('studyAbroadAssistant', {
+        type: 'getQuestionnaireInfo',
+        name: '留学择校评估问卷'
+      })
+      const questionInfo = res.result.list[0]
+
       // 初次答题加入record页面
       questionInfo.questions.push({
         index: questionInfo.questions.length,
@@ -48,7 +52,6 @@ Page({
       }) 
 
       this.setData({
-        // questionInfo: res.result.list[0]
         questionInfo
       })
     } catch (error) {
@@ -66,7 +69,7 @@ Page({
   },
   handleQuestionConfirm(e) {
     console.log('select', e.detail)
-    const { answers, current, questionInfo } = this.data
+    const { answers, currentIndex, questionInfo } = this.data
     const length = questionInfo.questions.length;
     const { questionIndex, questionId, selected } = e.detail
     // 记录题目选项
@@ -89,24 +92,11 @@ Page({
       questionInfo
     })
     // 不是最后一题则自动跳转下一题
-    if (current < questionInfo.questions.length - 1) {
+    if (currentIndex < questionInfo.questions.length - 1) {
       setTimeout(() => {
-        this.setData({ current: current + 1 })
+        this.setData({ current: currentIndex + 1 })
       }, 150)
     }
-    // 最后一题选中后跳转answer页面
-    // if (questionIndex === questionInfo.questions.length - 1) {
-    //   wx.navigateTo({
-    //     url: '/pages/answer/index',
-    //     success: res => {
-    //       // 这里给要打开的页面传递数据.  第一个参数:方法key, 第二个参数:需要传递的数据
-    //       res.eventChannel.emit('setAnswers', {
-    //         questionnaireName: this.data.questionInfo.name,
-    //         answers: this.data.answers
-    //       })
-    //     },
-    //   })
-    // }
   },
   handleQuestionChange(e) {
     // 返回当前的真实index
@@ -118,50 +108,111 @@ Page({
     this.selectComponent('#swiper').init(e.detail.index);
   },
   // 交卷
-  handleConfirmAnswer(e) {
+  async handleConfirmAnswer(e) {
     const { isFinish } = e.detail
+    const userInfo = wx.getStorageSync('userInfo')
     if (isFinish) {
-      // 保存结果到数据库并跳转结果页面
+      const score = this.calculateScore()
+      await this.pullAnswers({
+        userId: userInfo._id,
+        questionnaireId: this.data.questionInfo._id,
+        answers: this.data.answers,
+        score,
+        isFinish
+      })
+      this.navigateToRecord(score)
     } else {
       // 二次确认
       Dialog.confirm({
         title: '提示',
         message: '您有题目未做完，确认提交吗？',
         className: 'not-finish-dialog'
-      }).then(() => {
+      }).then(async () => {
         // on confirm
+        const { answers, questionInfo } = this.data
+        const length = questionInfo.questions.length
+        if (answers.length < length - 1) {
+          const hasAnswerIndexList = answers.map(item => item.questionIndex);
+          // 题目未答完，填充答案为空
+          questionInfo.questions.slice(0, length - 1).forEach(item => {
+            if (!hasAnswerIndexList.includes(item.index)) {
+              answers.push({
+                questionIndex: item.index,
+                questionId: item._id,
+                selected: null
+              })
+            }
+          })
+          this.setData({ answers })
+        }
+        const score = this.calculateScore()
+        await this.pullAnswers({
+          userId: userInfo._id,
+          questionnaireId: this.data.questionInfo._id,
+          answers: this.data.answers,
+          score,
+          isFinish
+        })
+        this.navigateToRecord(score)
       })
       .catch(() => {
         // on cancel
       });
     }
   },
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
+  // 推送答案
+  async pullAnswers({ userId, questionnaireId, answers, score, isFinish }) {
+    this.setData({ submitLoading: true })
+    try {
+      await requestCloud('studyAbroadAssistant', {
+        type: 'submitEstimate',
+        userId,
+        questionnaireId,
+        answers,
+        score,
+        isFinish
+      })
+    } catch (error) {
+      console.error(error)
+    }
+    this.setData({ submitLoading: false })
   },
+  // 计算得分并跳转到得分页
+  calculateScore() {
+    const { answers } = this.data
+    const { questions } = this.data.questionInfo
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
+    let bigPoint = 0,
+      smallPoint = 0
+    answers.forEach(item => {
+      questions[item.questionIndex].options.forEach(option => {
+        if (option.title === item.selected) {
+          bigPoint += option.bigPoint
+          smallPoint += option.smallPoint
+        }
+      })
+    })
+    return {
+      bigPoint,
+      smallPoint
+    }
   },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
+  // 跳转答案页
+  navigateToRecord(score) {
+    wx.navigateTo({
+      url: '/pages/answer/index',
+      success: res => {
+        // 这里给要打开的页面传递数据.  第一个参数:方法key, 第二个参数:需要传递的数据
+        res.eventChannel.emit('setScore', {
+          score
+        })
+      }
+    })
   },
-
   /**
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-
   },
 
   /**

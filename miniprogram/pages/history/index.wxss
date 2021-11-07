@@ -1,0 +1,22 @@
+/* pages/history/index.wxss */
+.van-cell-group--inset {
+  margin-top: 20rpx!important;
+}
+.cell-title {
+  flex: 2!important;
+  font-size: 16px;
+  height: 100rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.cell-label {
+  font-size: 16px!important;
+}
+.finish {
+  font-size: 16px!important;
+}
+.not-finish {
+  font-size: 16px!important;
+  color: #2f80ed!important;
+}
