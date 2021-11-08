@@ -1,4 +1,4 @@
-// pages/history/index.js
+// pages/adminUser/index.js
 const { requestCloud } = require('../../utils/request')
 
 Page({
@@ -7,33 +7,60 @@ Page({
    * 页面的初始数据
    */
   data: {
-    recordInfo: []
+    userList: [],
+    showKeyList: [
+      {
+        key: 'gender',
+        value: '性别'
+      },
+      {
+        key: 'birthday',
+        value: '生日'
+      },
+      {
+        key: 'university',
+        value: '在读大学'
+      },
+      {
+        key: 'intendedUniversity',
+        value: '意向院校'
+      },
+      {
+        key: 'graduateTime',
+        value: '毕业时间'
+      }
+    ] 
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    console.log(options)
-    const { userId } = options
-    this.getRecord(userId)
+    this.getUserList()
   },
-  async getRecord(userId=null) {
-    let id
-    if (!userId) {
-      const userInfo = wx.getStorageSync('userInfo')
-      id = userInfo._id
-    } else {
-      id = userId
-    }
+  async getUserList() {
     const res = await requestCloud('studyAbroadAssistant', {
-      type: 'getRecord',
-      userId: id
+      type: 'getUserList',
+    })
+    res.data.forEach(item => {
+      item.showItem = false;
     })
     this.setData({
-      recordInfo: res.result.list
+      userList: res.data
     })
-    console.log(this.data.recordInfo)
+  },
+  onClickUserInfo(e) {
+    const index = e.currentTarget.dataset.index;
+    const userList = this.data.userList;
+    userList[index].showItem = !userList[index].showItem;
+    this.setData({ userList })
+  },
+
+  jumpToRecord(e) {
+    const {userid} = e.currentTarget.dataset;
+    wx.navigateTo({
+      url: `/pages/history/index?userId=${userid}`,
+    });
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

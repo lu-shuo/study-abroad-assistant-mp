@@ -4,19 +4,19 @@
 }
 .cell-title {
   flex: 2!important;
-  font-size: 16px;
+  font-size: 30rpx;
   height: 100rpx;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 .cell-label {
-  font-size: 16px!important;
+  font-size: 25rpx!important;
 }
 .finish {
-  font-size: 16px!important;
+  font-size: 30rpx!important;
 }
 .not-finish {
-  font-size: 16px!important;
+  font-size: 30rpx!important;
   color: #2f80ed!important;
 }

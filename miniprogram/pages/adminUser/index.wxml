@@ -1,0 +1,50 @@
+<!--pages/adminUser/index.wxml-->
+<wxs module="dateUtil" src="../../utils/index.wxs"></wxs>
+<view class="container">
+  <view class="user" wx:key="_id" wx:for="{{userList}}" wx:for-item="user">
+    <view class="user_info" data-index="{{index}}" bindtap="onClickUserInfo">
+      <van-image
+        fill="cover"
+        round
+        width="128rpx"
+        height="128rpx"
+        src="{{user.avatarUrl}}"
+        bindtap="onClickAvatar"
+      />
+      <view class="user_info_text">
+        <view class="user_info_text_nickname">{{user.nickName}}</view>
+        <view class="user_info_text_last_login">
+          最后登录时间：{{dateUtil.dateFormat(user.lastLoginTime)}}
+        </view>
+      </view>
+      <image wx:if="{{!user.showItem}}" class="user_info_more" src="../../images/arrow.svg"></image>
+      <image wx:if="{{user.showItem}}" class="user_info_less" src="../../images/arrow.svg"></image>
+    </view>
+    <view wx:if="{{user.showItem}}">
+      <view>
+        <view class="line"></view>
+        <view class="user_info_item" bindtap="jumpToRecord" data-userid="{{user._id}}">
+          <view class="user_info_item_text record">
+            评估记录
+          </view>
+          <image class="user_info_item_icon" src="../../images/arrow.svg"></image>
+        </view>
+      </view>
+      <view wx:for="{{showKeyList}}" wx:key="key">
+        <block wx:if="{{user[item.key]}}">
+          <view class="line"></view>
+          <view class="user_info_item">
+            <view class="user_info_item_text">
+              {{item.value}}：
+              {{
+                (item.key === 'birthday' || item.key === 'graduateTime')
+                  ? dateUtil.dateFormat(user[item.key], 'yyyy-MM-dd')
+                  : user[item.key]
+              }}
+            </view>
+          </view>
+        </block>
+      </view>
+    </view>
+  </view>
+</view>

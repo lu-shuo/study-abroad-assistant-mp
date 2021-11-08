@@ -9,38 +9,38 @@ Page({
       {
         title: '用户',
         tip: '查看用户信息、评估记录',
+        page: 'adminUser'
       }, 
       {
-        title: '数据库',
-        tip: '安全稳定的文档型数据库',
+        title: '题目',
+        tip: '添加、编辑题库',
         showItem: false,
-        item: [{
-          title: '创建集合',
-          page: 'createCollection'
-        }, {
-          title: '更新记录',
-          page: 'updateRecord'
-        }, {
-          title: '查询记录',
-          page: 'selectRecord'
-        }, {
-          title: '聚合操作',
-          page: 'sumRecord'
-        }]
+        item: [
+          {
+            title: '添加题目',
+            page: 'createCollection'
+          },
+          {
+            title: '编辑题目',
+            page: 'updateRecord'
+          }
+        ]
       }, 
       {
-        title: '云存储',
-        tip: '自带CDN加速文件存储',
+        title: '问卷',
+        tip: '添加、编辑问卷',
+        showItem: false,
+        item: [
+          {
+            title: '添加问卷',
+            page: 'createCollection'
+          },
+          {
+            title: '编辑问卷',
+            page: 'updateRecord'
+          }
+        ]
       },
-      {
-        title: '云托管',
-        tip: '不限语言的全托管容器服务',
-        showItem: false,
-        item: [{
-          title: '部署服务',
-          page: 'deployService'
-        }]
-      }
     ],
     envList,
     selectedEnv: envList[0],
@@ -89,7 +89,7 @@ Page({
 
   jumpPage(e) {
     wx.navigateTo({
-      url: `/pages/${e.currentTarget.dataset.page}/index?envId=${this.data.selectedEnv.envId}`,
+      url: `/pages/${e.currentTarget.dataset.page}/index`,
     });
   },
 

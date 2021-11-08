@@ -27,7 +27,7 @@
       </view>
     </block>
     <block wx:else>
-      <view class="power_info" data-index="{{index}}" bindtap="onClickPowerInfo">
+      <view class="power_info" data-page="{{power.page}}" bindtap="jumpPage">
         <view class="power_info_text">
           <view class="power_info_text_title">{{power.title}}</view>
           <view class="power_info_text_tip">{{power.tip}}</view>

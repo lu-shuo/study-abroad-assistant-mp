@@ -8,6 +8,8 @@ const db = cloud.database()
 
 const user = db.collection('user')
 
+const MAX_LIMIT = 100
+
 // event 就是小程序端调用云函数时传入的参数，外加后端自动注入的小程序用户的 openid 和小程序的 appid。
 // context 对象包含了此处调用的调用信息和运行状态，可以用它来了解服务运行的情况
 exports.login = async (event, context) => {
@@ -37,7 +39,7 @@ exports.login = async (event, context) => {
           university: null,
           graduateTime: null,
           intendedUniversity: null,
-          lastLoginTime: new Date(),
+          lastLoginTime: new Date().getTime(),
         }
       })
     } else {
@@ -45,7 +47,7 @@ exports.login = async (event, context) => {
       await user.doc(OPENID).update({
         data: {
           // 表示将 done 字段置为 true
-          lastLoginTime: new Date()
+          lastLoginTime: new Date().getTime()
         },
       })
     }
@@ -81,4 +83,24 @@ exports.updateInfo = async (event, context) => {
   } catch (error) {
     return { code: 1, error }
   }
+}
+
+exports.getUserList = async (event, context) => {
+  const countResult = await user.count()
+  const total = countResult.total
+  // 计算需分几次取
+  const batchTimes = Math.ceil(total / 100)
+  // 承载所有读操作的 promise 的数组
+  const tasks = []
+  for (let i = 0; i < batchTimes; i++) {
+    const promise = user.skip(i * MAX_LIMIT).limit(MAX_LIMIT).get()
+    tasks.push(promise)
+  }
+  // 等待所有
+  return (await Promise.all(tasks)).reduce((acc, cur) => {
+    return {
+      data: acc.data.concat(cur.data),
+      errMsg: acc.errMsg,
+    }
+  })
 }

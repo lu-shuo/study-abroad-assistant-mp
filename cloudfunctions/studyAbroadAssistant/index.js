@@ -9,6 +9,8 @@ exports.main = async (event, context) => {
       return await user.login(event, context)
     case 'updateUserInfo':
       return await user.updateInfo(event, context)
+    case 'getUserList':
+      return await user.getUserList(event, context)
     case 'getQuestionnaireInfo':
       return await questionnaire.getQuestionnaireInfo(event, context)
     case 'submitEstimate':

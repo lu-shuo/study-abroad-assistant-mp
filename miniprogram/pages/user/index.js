@@ -126,7 +126,8 @@ Page({
       } 
     })
   },
-  onClickLeft() {
+  onClickAvatar() {
+    if (this.data.userInfo.role !== 'admin') return false;
     wx.navigateTo({
       url: '/pages/admin/index',
     })

@@ -1,40 +1,20 @@
-// pages/history/index.js
-const { requestCloud } = require('../../utils/request')
-
+// pages/adminQuestionnaire/index.js
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    recordInfo: []
+
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    console.log(options)
-    const { userId } = options
-    this.getRecord(userId)
+
   },
-  async getRecord(userId=null) {
-    let id
-    if (!userId) {
-      const userInfo = wx.getStorageSync('userInfo')
-      id = userInfo._id
-    } else {
-      id = userId
-    }
-    const res = await requestCloud('studyAbroadAssistant', {
-      type: 'getRecord',
-      userId: id
-    })
-    this.setData({
-      recordInfo: res.result.list
-    })
-    console.log(this.data.recordInfo)
-  },
+
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

@@ -1,0 +1,80 @@
+/* pages/adminUser/index.wxss */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+page {
+  padding-top: 20rpx;
+  background-color: #f6f6f6;
+  padding-bottom: 60rpx;
+}
+.user {
+  margin-bottom: 30rpx;
+  border-radius: 5px;
+  background-color: white;
+  width: 93%;
+  padding-bottom: 1rpx;
+}
+
+.user_info {
+  display: flex;
+  padding: 30rpx 25rpx;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.user_info_text {
+  display: flex;
+  flex-direction: column;
+}
+
+.user_info_text_nickname {
+  margin-bottom: 20rpx;
+  font-weight: 400;
+  font-size: 35rpx;
+}
+
+.user_info_text_last_login{
+  color: rgba(0, 0, 0, 0.4);
+  font-size: 25rpx;
+}
+
+.user_info_more {
+  width: 30rpx;
+  height: 30rpx;
+  transform: rotate(90deg);
+}
+
+.user_info_less {
+  width: 30rpx;
+  height: 30rpx;
+  transform: rotate(270deg);
+}
+
+.line {
+  width: 95%;
+  margin: 0 auto;
+  height: 2rpx;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.user_info_item {
+  padding: 30rpx 40rpx;
+  display: flex;
+  justify-content: space-between;
+}
+
+.user_info_item_text {
+  font-size: 30rpx;
+}
+
+.record {
+  color: #2f80ed;
+}
+
+.user_info_item_icon {
+  width: 30rpx;
+  height: 30rpx;
+}
