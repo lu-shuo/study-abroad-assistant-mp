@@ -1,2 +1,43 @@
 <!--pages/admin/index.wxml-->
-<van-button type="primary">主要按钮</van-button>
+<!--index.wxml-->
+<view class="container">
+
+  <!-- <view class="title">留学小助手管理端</view> -->
+
+  <view class="top_tip">当前功能：用户信息查看、编辑题目、编辑问卷</view>
+
+  <view class="power" wx:key="title" wx:for="{{powerList}}" wx:for-item="power">
+    <block wx:if="{{power.item}}">
+      <view class="power_info" data-index="{{index}}" bindtap="onClickPowerInfo">
+        <view class="power_info_text">
+          <view class="power_info_text_title">{{power.title}}</view>
+          <view class="power_info_text_tip">{{power.tip}}</view>
+        </view>
+        <image wx:if="{{!power.showItem}}" class="power_info_more" src="../../images/arrow.svg"></image>
+        <image wx:if="{{power.showItem}}" class="power_info_less" src="../../images/arrow.svg"></image>
+      </view>
+      <view wx:if="{{power.showItem}}">
+        <view wx:key="title" wx:for="{{power.item}}">
+          <view class="line"></view>
+          <view class="power_item" bindtap="jumpPage" data-page="{{item.page}}">
+            <view class="power_item_title">{{item.title}}</view>
+            <image class="power_item_icon" src="../../images/arrow.svg"></image>
+          </view>
+        </view>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="power_info" data-index="{{index}}" bindtap="onClickPowerInfo">
+        <view class="power_info_text">
+          <view class="power_info_text_title">{{power.title}}</view>
+          <view class="power_info_text_tip">{{power.tip}}</view>
+        </view>
+        <image class="power_item_icon" src="../../images/arrow.svg"></image>
+      </view>
+    </block>
+  </view>
+
+  <view class="environment" bindtap="onChangeShowEnvChoose">当前版本： {{ selectedEnv.alias }}</view>
+
+</view>
+

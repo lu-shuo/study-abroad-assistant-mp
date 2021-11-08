@@ -1,4 +1,9 @@
 <!--pages/user/index.wxml-->
+<van-nav-bar
+  title="我的"
+  left-text="管理"
+  bind:click-left="onClickLeft"
+/>
 <wxs module="dateUtil" src="../../utils/index.wxs"></wxs>
 <view class="container">
   <van-cell-group inset custom-class="header">

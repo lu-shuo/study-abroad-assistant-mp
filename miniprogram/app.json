@@ -13,9 +13,11 @@
     "van-field": "@vant/weapp/field/index",
     "van-loading": "@vant/weapp/loading/index",
     "van-tag": "@vant/weapp/tag/index",
-    "van-dialog": "@vant/weapp/dialog/index"
+    "van-dialog": "@vant/weapp/dialog/index",
+    "van-nav-bar": "@vant/weapp/nav-bar/index"
   },
   "pages": [
+    "pages/admin/index",
     "pages/login/index",
     "pages/questionnaire/index",
     "pages/universities/index",
@@ -23,7 +25,6 @@
     "pages/history/index",
     "pages/user/index",
     "pages/edit/index",
-    "pages/admin/index",
     "pages/answer/index"
   ],
   "window": {
