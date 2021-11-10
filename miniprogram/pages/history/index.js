@@ -14,7 +14,6 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    console.log(options)
     const { userId } = options
     this.getRecord(userId)
   },
@@ -33,7 +32,17 @@ Page({
     this.setData({
       recordInfo: res.result.list
     })
-    console.log(this.data.recordInfo)
+  },
+  jumpToQuestionnaire(e) {
+    wx.navigateTo({
+      url: `/pages/questionnaire/index`,
+      success: res => {
+        // 这里给要打开的页面传递数据.  第一个参数:方法key, 第二个参数:需要传递的数据
+        res.eventChannel.emit('setRecord', {
+          record: this.data.recordInfo[e.currentTarget.dataset.index],
+        })
+      },
+    });
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

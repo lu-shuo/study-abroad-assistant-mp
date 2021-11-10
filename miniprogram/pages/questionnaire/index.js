@@ -1,6 +1,6 @@
 // pages/questionnaire/index.js
 const { requestCloud } = require('../../utils/request')
-const questionInfo = require('../../test/questionnaire')
+// const questionInfo = require('../../test/questionnaire')
 import Dialog from '@vant/weapp/dialog/dialog';
 
 Page({
@@ -9,6 +9,7 @@ Page({
    */
   data: {
     questionInfo: {},
+    record: null, // 历史评估记录
     answers: [],
     loading: false,
     submitLoading: false,
@@ -29,27 +30,54 @@ Page({
         console.log("取消退出：", errMsg);
       },
     });
+    // 接收record数据
+    const eventChannel = this.getOpenerEventChannel()
+    eventChannel.on('setRecord', ({ record }) => {
+      this.setData({ record })
+    })
+
     this.setData({
       swiperHeight: wx.getSystemInfoSync().windowHeight - 100,
     })
-    this.getQuestionInfo()
+    this.getQuestionInfo(this.data.record)
   },
-  async getQuestionInfo() {
+  async getQuestionInfo(record = null) {
     // 拉取问卷详情
     this.setData({loading: true})
     try {
+      let questionnaireName
+      if (record) {
+        questionnaireName = record.questionnaireInfo[0].name
+      } else {
+        questionnaireName = '留学择校评估问卷'
+      }
       const res = await requestCloud('studyAbroadAssistant', {
         type: 'getQuestionnaireInfo',
-        name: '留学择校评估问卷'
+        name: questionnaireName
       })
       const questionInfo = res.result.list[0]
+      
+      if (record) {
+        const { answers } = record
+        // 还原答案
+        questionInfo.questions.forEach(item => {
+          item.disabled = true
+          answers.forEach(answer => {
+            if (item.index === answer.questionIndex) {
+              item.selected = answer.selected
+            }
+          })
+        })
+      }
+      console.log(record)
 
       // 初次答题加入record页面
       questionInfo.questions.push({
         index: questionInfo.questions.length,
         qType: -1, // 代表record页面
-        answers: Array.from({ length: questionInfo.questions.length }, (v, i) => ({ index: i, selected: null })),
-      }) 
+        isHistory: record ? true : false,
+        answers: Array.from({ length: questionInfo.questions.length }, (v, i) => ({ index: i, selected: record ? record.answers[i].selected : null })),
+      })
 
       this.setData({
         questionInfo
@@ -58,11 +86,13 @@ Page({
       console.error(error)
     }
     this.setData({loading: false})
-    this.jumpToQuestion(0)
+    console.log(this.data.questionInfo.questions.length)
+    this.jumpToQuestion(record ? this.data.questionInfo.questions.length - 1 : 0)
   },
   jumpToQuestion(index) {
     this.setData({ swiperDuration: 0 })
     // 初始化到上次答题位置
+    this.setData({ currentIndex: index })
     this.selectComponent('#swiper').init(index)
     // 恢复swiper动画
     this.setData({ swiperDuration: 500 })
@@ -105,6 +135,7 @@ Page({
   },
   handleRecordClick(e) {
     // 跳转到对应题目
+    this.setData({ currentIndex: e.detail.index })
     this.selectComponent('#swiper').init(e.detail.index);
   },
   // 交卷

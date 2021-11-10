@@ -18,11 +18,11 @@ Page({
         item: [
           {
             title: '添加题目',
-            page: 'createCollection'
+            page: 'adminQuestion'
           },
           {
             title: '编辑题目',
-            page: 'updateRecord'
+            page: 'adminQuestion'
           }
         ]
       }, 
@@ -92,35 +92,4 @@ Page({
       url: `/pages/${e.currentTarget.dataset.page}/index`,
     });
   },
-
-  onClickDatabase(powerList) {
-    wx.showLoading({
-      title: '',
-    });
-    wx.cloud.callFunction({
-      name: 'quickstartFunctions',
-      config: {
-        env: this.data.selectedEnv.envId
-      },
-      data: {
-        type: 'createCollection'
-      }
-    }).then((resp) => {
-      if (resp.result.success) {
-        this.setData({
-          haveCreateCollection: true
-        });
-      }
-      this.setData({
-        powerList
-      });
-      wx.hideLoading();
-    }).catch((e) => {
-      console.log(e);
-      this.setData({
-        showUploadTip: true
-      });
-      wx.hideLoading();
-    });
-  }
 });

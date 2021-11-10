@@ -18,15 +18,15 @@
   },
   "pages": [
     "pages/login/index",
+    "pages/history/index",
+    "pages/admin/index",
     "pages/adminUser/index",
     "pages/user/index",
-    "pages/admin/index",
     "pages/adminQuestion/index",
     "pages/adminQuestionnaire/index",
     "pages/questionnaire/index",
     "pages/universities/index",
     "pages/estimate/index",
-    "pages/history/index",
     "pages/edit/index",
     "pages/answer/index"
   ],

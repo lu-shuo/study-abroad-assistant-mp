@@ -36,6 +36,6 @@
         {{index + 1}}
       </view>
     </view>
-    <van-button round size="normal" bind:click="confirmAnswer" custom-class="confirm-btn">交卷</van-button>
+    <van-button wx:if="{{!info.isHistory}}" round size="normal" bind:click="confirmAnswer" custom-class="confirm-btn">交卷</van-button>
   </view>
 </scroll-view>
