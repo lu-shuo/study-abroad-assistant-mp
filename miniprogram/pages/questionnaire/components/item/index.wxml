@@ -1,7 +1,17 @@
 <!--pages/questionnaire/components/item/index.wxml-->
 <scroll-view style="height:{{height}}px" scroll-y >
   <view class="question-wrapper" wx:if="{{info.qType !== -1}}">
-    <van-tag plain type="primary">{{info.qType === 0 ? '单选': '多选'}}</van-tag>
+    <!-- <van-tag size="medium" type="primary" custom-class="tag">{{info.qType === 0 ? '单选': '多选'}}</van-tag> -->
+    <!-- <van-tag size="medium" type="primary" custom-class="tag">{{info.mainSort}}</van-tag>
+    <van-tag size="medium" type="primary" custom-class="tag">{{info.subSort}}</van-tag> -->
+    <view class="tag-wrapper">
+      <van-tag size="medium" type="primary" custom-class="tag">{{info.qType === 0 ? '单选': '多选'}}</van-tag>
+      <view>
+        <van-tag size="medium" round  type="primary" custom-class="tag">{{info.mainSort}}</van-tag>
+        <van-tag size="medium" round  type="primary" >{{info.subSort}}</van-tag>
+      </view>
+    </view>
+    
     <view class="content">
       <view class="title">{{info.title}}</view>
       <view class="single-option" wx:if="{{info.qType === 0}}">

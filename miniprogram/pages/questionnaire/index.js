@@ -69,12 +69,10 @@ Page({
           })
         })
       }
-      console.log(record)
 
-      // 初次答题加入record页面
       questionInfo.questions.push({
         index: questionInfo.questions.length,
-        qType: -1, // 代表record页面
+        qType: -1, // -1-答题卡页 -2-历史记录跳转答题卡
         isHistory: record ? true : false,
         answers: Array.from({ length: questionInfo.questions.length }, (v, i) => ({ index: i, selected: record ? record.answers[i].selected : null })),
       })
@@ -86,7 +84,6 @@ Page({
       console.error(error)
     }
     this.setData({loading: false})
-    console.log(this.data.questionInfo.questions.length)
     this.jumpToQuestion(record ? this.data.questionInfo.questions.length - 1 : 0)
   },
   jumpToQuestion(index) {

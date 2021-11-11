@@ -22,7 +22,7 @@ exports.submitEstimate = async (event, context) => {
         answers,
         score,
         isFinish,
-        submitTime: new Date(),
+        submitTime: new Date().getTime(),
       }
     })
     return {

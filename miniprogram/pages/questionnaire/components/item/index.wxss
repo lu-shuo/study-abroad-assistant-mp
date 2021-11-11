@@ -5,6 +5,17 @@
   box-sizing: border-box;
   padding: 40rpx;
 }
+.tag-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.tag {
+  margin-right: 20rpx;
+}
+/* .sort {
+  width: ;
+} */
 .content {
   margin-top: 20rpx;
 }
