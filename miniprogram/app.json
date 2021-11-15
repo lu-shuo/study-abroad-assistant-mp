@@ -17,6 +17,7 @@
     "van-nav-bar": "@vant/weapp/nav-bar/index"
   },
   "pages": [
+    "pages/answer/index",
     "pages/login/index",
     "pages/history/index",
     "pages/admin/index",
@@ -27,8 +28,7 @@
     "pages/questionnaire/index",
     "pages/universities/index",
     "pages/estimate/index",
-    "pages/edit/index",
-    "pages/answer/index"
+    "pages/edit/index"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",

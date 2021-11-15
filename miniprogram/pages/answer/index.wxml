@@ -1,14 +1,9 @@
 <!--pages/answer/index.wxml-->
-<view class="answer-container">
-  <van-cell-group
-    inset
-    size="large"
-  >
-    <van-cell
-      title-class="cell-title"
-      label-class="cell-label"
-      title="您本次的评估得分为："
-      label="大分：{{bigPoint}}/小分：{{smallPoint}}"
-    />
-  </van-cell-group>
+<view class="container">
+  <view class="result">
+    <view class="total">
+      <text>总得分</text>
+      <text class="score">75</text>
+    </view>
+  </view>
 </view>
