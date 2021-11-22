@@ -1,6 +1,7 @@
 /* pages/questionnaire/index.wxss */
 .container {
-  height: 98vh;
+  width: 100%;
+  height: 100%;
   position: relative;
 }
 .questionnaire-name {

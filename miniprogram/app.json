@@ -17,8 +17,8 @@
     "van-nav-bar": "@vant/weapp/nav-bar/index"
   },
   "pages": [
-    "pages/answer/index",
     "pages/login/index",
+    "pages/answer/index",
     "pages/history/index",
     "pages/admin/index",
     "pages/adminUser/index",
