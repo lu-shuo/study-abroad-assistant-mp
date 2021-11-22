@@ -21,10 +21,14 @@ Page({
     if (userInfo) {
       wx.switchTab({
         url: '/pages/estimate/index',
+        // url: '/packageCharts/pages/answer/index',
         success: () => {
           this.login(userInfo, false)
         }
       })
+      // wx.navigateTo({
+      //   url: '/packageCharts/pages/answer/index',
+      // })
       return;
     }
     if (!wx.getUserProfile) {

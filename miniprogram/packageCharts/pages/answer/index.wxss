@@ -1,15 +1,31 @@
 /* pages/answer/index.wxss */
-.result {
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+.block {
   margin-bottom: 30rpx;
   border-radius: 5px;
   background-color: white;
   width: 93%;
 }
-.total {
+.block-content {
   font-weight: 400;
   font-size: 35rpx;
-  display: flex;
   padding: 30rpx 30rpx;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: space-between;
 }
@@ -18,7 +34,15 @@
   color: #2f80ed;
 }
 
+.title {
+  width: 100%;
+}
+
+.chart-wrapper {
+  width: 100%;
+  height: 30vh;
+}
 ec-canvas {
-  width: 500px;
-  height: 500px;
+  width: 100%;
+  height: 100%;
 }

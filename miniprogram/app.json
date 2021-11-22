@@ -18,7 +18,6 @@
   },
   "pages": [
     "pages/login/index",
-    "pages/answer/index",
     "pages/history/index",
     "pages/admin/index",
     "pages/adminUser/index",
