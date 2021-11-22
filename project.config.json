@@ -40,7 +40,7 @@
   },
   "appid": "wxb421c9cef4f5da20",
   "projectname": "mp-cloud",
-  "libVersion": "2.14.1",
+  "libVersion": "2.21.0",
   "cloudfunctionTemplateRoot": "cloudfunctionTemplate",
   "condition": {
     "search": {

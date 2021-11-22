@@ -5,31 +5,42 @@ Page({
    * 页面的初始数据
    */
   data: {
-    bigPoint: 0,
-    smallPoint: 0,
+
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    const eventChannel = this.getOpenerEventChannel()
-    // 事件名和上个页面设置的相同即可
-    eventChannel.on('setScore', ({ score }) => {
-      this.setData({  
-        bigPoint: score.bigPoint,
-        smallPoint: score.smallPoint
-      })
-    })
+
+  },
+
+  /**
+   * 生命周期函数--监听页面初次渲染完成
+   */
+  onReady: function () {
+
+  },
+
+  /**
+   * 生命周期函数--监听页面显示
+   */
+  onShow: function () {
+
+  },
+
+  /**
+   * 生命周期函数--监听页面隐藏
+   */
+  onHide: function () {
+
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-    wx.reLaunch({
-      url: '/pages/estimate/index',
-    })
+
   },
 
   /**

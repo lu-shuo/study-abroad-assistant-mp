@@ -11,11 +11,11 @@ Component({
       },
       info: {
         type: Object,
-        value: null
+        value: {}
       },
       index: {
         type: Number,
-        value: null
+        value: 0
       }
     },
     observers: {
@@ -28,6 +28,9 @@ Component({
       
     },
 
+    onLoad() {
+      console.log(this.index, this.height)
+    },
     /**
      * 组件的方法列表
      */

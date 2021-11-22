@@ -58,7 +58,7 @@ Component({
      */
     methods: {
       init(realIndex) {
-        // console.log('init')
+        // console.log(realIndex, typeof realIndex)
         const { list } = this.data
         if (!list || !list.length) return
         const virtualIndex = realIndex % VIRTUAL_SWIPER_LENGTH 

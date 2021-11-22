@@ -1,0 +1,24 @@
+/* pages/answer/index.wxss */
+.result {
+  margin-bottom: 30rpx;
+  border-radius: 5px;
+  background-color: white;
+  width: 93%;
+}
+.total {
+  font-weight: 400;
+  font-size: 35rpx;
+  display: flex;
+  padding: 30rpx 30rpx;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.score {
+  color: #2f80ed;
+}
+
+ec-canvas {
+  width: 500px;
+  height: 500px;
+}

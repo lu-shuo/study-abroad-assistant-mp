@@ -77,6 +77,8 @@ Page({
         answers: Array.from({ length: questionInfo.questions.length }, (v, i) => ({ index: i, selected: record ? record.answers[i].selected : null })),
       })
 
+      console.log(questionInfo)
+      
       this.setData({
         questionInfo
       })
@@ -228,7 +230,7 @@ Page({
   // 跳转答案页
   navigateToRecord(score) {
     wx.navigateTo({
-      url: '/pages/answer/index',
+      url: '/packageCharts/pages/answer/index',
       success: res => {
         // 这里给要打开的页面传递数据.  第一个参数:方法key, 第二个参数:需要传递的数据
         res.eventChannel.emit('setScore', {

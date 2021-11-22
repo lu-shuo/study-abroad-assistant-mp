@@ -1,0 +1,10 @@
+<!--pages/answer/index.wxml-->
+<view class="container">
+  <view class="result">
+    <view class="total">
+      <text>总得分</text>
+      <text class="score">75</text>
+    </view>
+  </view>
+  <ec-canvas id="mychart-dom-bar" canvas-id="mychart-bar" ec="{{ ec }}"></ec-canvas>
+</view>

@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "ec-canvas": "../../ec-canvas/ec-canvas"
+  },
+  "navigationBarTitleText": "评估结果",
+  "disableScroll": true
+}
