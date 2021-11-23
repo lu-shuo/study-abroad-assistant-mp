@@ -12,6 +12,9 @@ function initChart(canvas, width, height, dpr) {
   canvas.setChart(chart);
 
   var option = {
+    title: {
+      text: '大类'
+    },
     series: [
       {
         name: '得分分类',
@@ -19,16 +22,16 @@ function initChart(canvas, width, height, dpr) {
         radius: '50%',
         label: {
           normal: {
-              show: true,
-              formatter: '{b}: {c} ({d}%)'
+            show: true,
+            formatter: '{b}: {c}\n\n ({d}%)'
           }
         },
         data: [
           { value: 1048, name: '知识' },
           { value: 735, name: '技能' },
-          { value: 580, name: '语言' },
-          { value: 484, name: '奖项' },
-          { value: 300, name: '实践' }
+          { value: 580, name: '态度' },
+          // { value: 484, name: '奖项' },
+          // { value: 300, name: '实践' }
         ],
         emphasis: {
           itemStyle: {

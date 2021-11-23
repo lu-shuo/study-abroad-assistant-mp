@@ -19,16 +19,16 @@ Page({
     // 查看缓存中有无用户数据，有则更新缓存中用户数据跳转首页，没有则不跳转显示登录按钮
     const userInfo = wx.getStorageSync('userInfo')
     if (userInfo) {
-      wx.switchTab({
-        url: '/pages/estimate/index',
-        // url: '/packageCharts/pages/answer/index',
-        success: () => {
-          this.login(userInfo, false)
-        }
-      })
-      // wx.navigateTo({
-      //   url: '/packageCharts/pages/answer/index',
+      // wx.switchTab({
+      //   url: '/pages/estimate/index',
+      //   // url: '/packageCharts/pages/answer/index',
+      //   success: () => {
+      //     this.login(userInfo, false)
+      //   }
       // })
+      wx.navigateTo({
+        url: '/packageCharts/pages/answer/index',
+      })
       return;
     }
     if (!wx.getUserProfile) {
