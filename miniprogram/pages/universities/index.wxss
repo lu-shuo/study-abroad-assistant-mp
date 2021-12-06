@@ -8,7 +8,8 @@
   box-sizing: border-box;
   width: 90%;
   height: 200rpx;
-  padding: 32rpx;
+  margin: 0 auto 32rpx;
+  padding: 14rpx 32rpx;
   background: #fff;
   border-radius: 10rpx;
   display: flex;
@@ -30,15 +31,25 @@
   font-size: 16px;
 }
 .english-name {
-  font-size: 14px;
+  font-size: 16px;
   color: gray;
   /* color: rgba(255, 255, 255, 0.295); */
 }
 .qs {
-  font-size: 12px;
+  font-size: 14px;
   color: #2f80ed;
 }
 .university-icon {
   width: 150rpx;
   height: 150rpx;
+}
+.loading {
+  position: relative;
+  bottom: 5rpx;
+  padding: 10rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* text-align: center; */
+  color: #2f80ed;
 }

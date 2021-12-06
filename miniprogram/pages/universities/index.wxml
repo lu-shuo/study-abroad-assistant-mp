@@ -4,17 +4,24 @@
     <view class="university-cell" wx:for="{{dataList}}" wx:key="_id">
       <view class="left">
         <view class="name">{{item.name}}</view>
-        <view class="english-name">Massachusetts Institute of Technology (MIT)</view>
-        <view class="qs">qs排名： 1</view>
+        <view class="english-name">{{item.en_name}}</view>
+        <view class="qs">qs排名: {{item.rank}}</view>
       </view>
       <view class="right">
         <image
-          src="cloud://cloud1-7gd3wdqv58b87401.636c-cloud1-7gd3wdqv58b87401-1307759619/university_pics/麻省理工学院.jpg"
+          src="{{'cloud://cloud1-7gd3wdqv58b87401.636c-cloud1-7gd3wdqv58b87401-1307759619/university_pics/' + item.name + '.jpg'}}"
           class="university-icon"
         ></image>
       </view>
     </view>
-    <view class="loading" hidden="{{!loadMore}}">正在载入更多...</view>
+    <!-- <view>
+      <van-loading type="spinner" color="#1989fa" size="24px" hidden="{{!loadMore}}">加载中...</van-loading>
+    </view> -->
+    
+    <view class="loading" hidden="{{!loadMore}}">
+      <van-loading type="spinner" color="#2f80ed" size="24px" hidden="{{!loadMore}}" />
+      <span style="margin-left: 10rpx;">正在载入更多...</span>
+    </view>
     <view class="loading" hidden="{{!loadAll}}">已加载全部</view>
   </scroll-view>
 </view>
