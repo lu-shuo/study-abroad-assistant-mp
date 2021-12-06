@@ -1,6 +1,7 @@
 const user = require('./user/index')
 const questionnaire = require('./questionnaire/index')
 const record = require('./record/index')
+const university = require('./university/index')
 
 // 云函数入口函数
 exports.main = async (event, context) => {
@@ -17,5 +18,7 @@ exports.main = async (event, context) => {
       return await record.submitEstimate(event, context)
     case 'getRecord':
       return await record.getRecord(event, context)
+    case 'getUniversityList':
+      return await university.getUniversityList(event, context)
   }
 }
