@@ -1,0 +1,37 @@
+<!--pages/history/index.wxml-->
+<wxs module="dateUtil" src="../../utils/index.wxs"></wxs>
+<view class="record-container">
+  <van-loading wx:if="{{loading}}" type="spinner" color="#2f80ed" size="50" custom-class="van-loading"/>
+  <scroll-view
+    wx:if="{{recordList.length}}"
+    style="height: 100%;"
+    scroll-y="true"
+    bindscrolltolower="handleScrolltolower"
+  >
+    <view 
+      class="record-cell"
+      wx:for="{{recordList}}"
+      wx:key="_id"
+      bindtap="handleCellClick"
+      data-isFinish="{{item.isFinish}}"
+      data-recordId="{{item._id}}"
+    >
+      <view class="left">
+        <view class="name">{{item.questionnaireName}}</view>
+        <view class="score">大分：{{item.score.bigPoint}}/小分：{{item.score.smallPoint}}</view>
+        <view class="time">{{dateUtil.dateFormat(item.submitTime)}}</view>
+      </view>
+      <view class="right">
+        <view class="{{ item.isFinish ? 'finish' : 'not-finish'}}">
+          {{item.isFinish ? '已完成' : '未完成'}}
+        </view>
+      </view>
+    </view>
+    <view class="loading" hidden="{{!loadMore}}">
+      <van-loading type="spinner" color="#2f80ed" size="24px" hidden="{{!loadMore}}" />
+      <span style="margin-left: 10rpx;">正在载入更多...</span>
+    </view>
+    <view class="loading" style="color: gray;" hidden="{{!loadAll}}">已加载全部</view>
+  </scroll-view>
+  <view wx:else>暂无记录</view>
+</view>

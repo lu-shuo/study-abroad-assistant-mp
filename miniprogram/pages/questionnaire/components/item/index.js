@@ -44,8 +44,8 @@ Component({
         this.triggerEvent('recordClick', { index })
       },
       confirmAnswer() {
-        const isFinish = !this.data.info.answers.some(item => item.selected === null);
-        this.triggerEvent('confirmAnswer', { isFinish })
+        // const isFinish = !this.data.info.answers.some(item => item.selected === null);
+        this.triggerEvent('confirmAnswer')
       },
     }
 })

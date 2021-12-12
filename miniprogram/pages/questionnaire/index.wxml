@@ -4,9 +4,9 @@
   <block wx:else>
     <view class="header">
       <van-cell-group inset>
-        <van-cell title="{{questionInfo.name}}" title-class="questionnaire-name"  size="large">
-          <view class="question-progress" wx:if="{{currentIndex !== questionInfo.questions.length - 1}}">
-            <view class="total">{{questionInfo.questions.length - 1}}</view>
+        <van-cell title="{{questionnaireInfo.name}}" title-class="questionnaire-name"  size="large">
+          <view class="question-progress" wx:if="{{currentIndex !== questionnaireInfo.questions.length - 1}}">
+            <view class="total">{{questionnaireInfo.questions.length - 1}}</view>
             /
             <view class="current">{{currentIndex + 1}}</view>
           </view>
@@ -20,7 +20,7 @@
         height="{{swiperHeight}}"
         duration="{{swiperDuration}}"
         current="{{current}}"
-        list="{{questionInfo.questions}}"
+        list="{{questionnaireInfo.questions}}"
         bind:optionConfirm="handleQuestionConfirm"
         bind:recordClick="handleRecordClick"
         bind:confirmAnswer="handleConfirmAnswer"

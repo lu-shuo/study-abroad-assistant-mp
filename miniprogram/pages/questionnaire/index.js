@@ -1,6 +1,6 @@
 // pages/questionnaire/index.js
 const { requestCloud } = require('../../utils/request')
-// const questionInfo = require('../../test/questionnaire')
+// const questionnaireInfo = require('../../test/questionnaire')
 import Dialog from '@vant/weapp/dialog/dialog';
 
 Page({
@@ -8,8 +8,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    questionInfo: {},
-    record: null, // 历史评估记录
+    questionnaireInfo: {},
+    recordInfo: null, // 历史评估记录
     answers: [],
     loading: false,
     submitLoading: false,
@@ -22,9 +22,10 @@ Page({
    */
   onLoad: function (options) {
     wx.enableAlertBeforeUnload({
-      message: "您还未完成评估，确定退出？",
+      message: "您还未完成本次评估，结果将保存到评估记录，确定退出？",
       success: function (res) {
         console.log("未完成退出：", res);
+        // this.handleConfirmAnswer({detail: false})
       },
       fail: function (errMsg) {
         console.log("取消退出：", errMsg);
@@ -32,22 +33,22 @@ Page({
     });
     // 接收record数据
     const eventChannel = this.getOpenerEventChannel()
-    eventChannel.on('setRecord', ({ record }) => {
-      this.setData({ record })
+    eventChannel.on('setRecord', ({ recordInfo }) => {
+      this.setData({ recordInfo })
     })
 
     this.setData({
       swiperHeight: wx.getSystemInfoSync().windowHeight - 100,
     })
-    this.getQuestionInfo(this.data.record)
+    this.getQuestionInfo(this.data.recordInfo)
   },
-  async getQuestionInfo(record = null) {
+  async getQuestionInfo(recordInfo = null) {
     // 拉取问卷详情
     this.setData({loading: true})
     try {
       let questionnaireName
-      if (record) {
-        questionnaireName = record.questionnaireInfo[0].name
+      if (recordInfo) {
+        questionnaireName = recordInfo.questionnaireName
       } else {
         questionnaireName = '留学择校评估问卷'
       }
@@ -55,12 +56,12 @@ Page({
         type: 'getQuestionnaireInfo',
         name: questionnaireName
       })
-      const questionInfo = res.result.list[0]
+      const questionnaireInfo = res.result.list[0]
       
-      if (record) {
-        const { answers } = record
+      if (recordInfo) {
+        const { answers } = recordInfo
         // 还原答案
-        questionInfo.questions.forEach(item => {
+        questionnaireInfo.questions.forEach(item => {
           item.disabled = true
           answers.forEach(answer => {
             if (item.index === answer.questionIndex) {
@@ -70,23 +71,24 @@ Page({
         })
       }
 
-      questionInfo.questions.push({
-        index: questionInfo.questions.length,
+      questionnaireInfo.questions.push({
+        index: questionnaireInfo.questions.length,
         qType: -1, // -1-答题卡页 -2-历史记录跳转答题卡
-        isHistory: record ? true : false,
-        answers: Array.from({ length: questionInfo.questions.length }, (v, i) => ({ index: i, selected: record ? record.answers[i].selected : null })),
+        isRecord: recordInfo ? true : false,
+        answers: 
+          Array.from({ length: questionnaireInfo.questions.length }, (v, i) => ({ index: i, selected: recordInfo ? recordInfo.answers[i].selected : null })),
       })
 
-      console.log(questionInfo)
+      console.log(questionnaireInfo)
       
       this.setData({
-        questionInfo
+        questionnaireInfo
       })
     } catch (error) {
       console.error(error)
     }
     this.setData({loading: false})
-    this.jumpToQuestion(record ? this.data.questionInfo.questions.length - 1 : 0)
+    this.jumpToQuestion(recordInfo ? this.data.questionnaireInfo.questions.length - 1 : 0)
   },
   jumpToQuestion(index) {
     this.setData({ swiperDuration: 0 })
@@ -98,17 +100,17 @@ Page({
   },
   handleQuestionConfirm(e) {
     console.log('select', e.detail)
-    const { answers, currentIndex, questionInfo } = this.data
-    const length = questionInfo.questions.length;
+    const { answers, currentIndex, questionnaireInfo } = this.data
+    const length = questionnaireInfo.questions.length;
     const { questionIndex, questionId, selected } = e.detail
     // 记录题目选项
-    questionInfo.questions.forEach((item, index) => {
+    questionnaireInfo.questions.forEach((item, index) => {
       if (item._id === questionId) {
-        questionInfo.questions[index].selected = selected
+        questionnaireInfo.questions[index].selected = selected
       }
     })
     // 填充答题记录
-    questionInfo.questions[length - 1].answers[questionIndex].selected = selected
+    questionnaireInfo.questions[length - 1].answers[questionIndex].selected = selected
     // 记录答案
     const index = answers.findIndex(item => item.questionId === questionId)
     if (index === -1) {
@@ -118,10 +120,10 @@ Page({
     }
     this.setData({
       answers,
-      questionInfo
+      questionnaireInfo
     })
     // 不是最后一题则自动跳转下一题
-    if (currentIndex < questionInfo.questions.length - 1) {
+    if (currentIndex < questionnaireInfo.questions.length - 1) {
       setTimeout(() => {
         this.setData({ current: currentIndex + 1 })
       }, 150)
@@ -138,66 +140,102 @@ Page({
     this.selectComponent('#swiper').init(e.detail.index);
   },
   // 交卷
-  async handleConfirmAnswer(e) {
-    const { isFinish } = e.detail
+  // isFinish: false-中途退出
+  async handleConfirmAnswer(isFinish = true) {
+    // const { isFinish } = e.detail
     const userInfo = wx.getStorageSync('userInfo')
     if (isFinish) {
-      const score = this.calculateScore()
-      await this.pullAnswers({
-        userId: userInfo._id,
-        questionnaireId: this.data.questionInfo._id,
-        answers: this.data.answers,
-        score,
-        isFinish
-      })
-      this.navigateToRecord(score)
-    } else {
-      // 二次确认
-      Dialog.confirm({
-        title: '提示',
-        message: '您有题目未做完，确认提交吗？',
-        className: 'not-finish-dialog'
-      }).then(async () => {
-        // on confirm
-        const { answers, questionInfo } = this.data
-        const length = questionInfo.questions.length
-        if (answers.length < length - 1) {
-          const hasAnswerIndexList = answers.map(item => item.questionIndex);
-          // 题目未答完，填充答案为空
-          questionInfo.questions.slice(0, length - 1).forEach(item => {
-            if (!hasAnswerIndexList.includes(item.index)) {
-              answers.push({
-                questionIndex: item.index,
-                questionId: item._id,
-                selected: null
-              })
-            }
-          })
-          this.setData({ answers })
-        }
+      const finishAll = this.data.answers.length === this.data.questionnaireInfo.questions.length - 1
+      if (finishAll) {
         const score = this.calculateScore()
         await this.pullAnswers({
           userId: userInfo._id,
-          questionnaireId: this.data.questionInfo._id,
+          questionnaireId: this.data.questionnaireInfo._id,
+          questionnaireName: this.data.questionnaireInfo.name,
           answers: this.data.answers,
           score,
-          isFinish
+          isFinish: true
         })
-        this.navigateToRecord(score)
+        this.navigateToAnswer(score)
+      } else {
+        // 二次确认
+        Dialog.confirm({
+          title: '提示',
+          message: '您有题目未做完，确认提交吗？',
+          className: 'not-finish-dialog'
+        }).then(async () => {
+          // on confirm
+          const { answers, questionnaireInfo } = this.data
+          const length = questionnaireInfo.questions.length
+          if (answers.length < length - 1) {
+            const hasAnswerIndexList = answers.map(item => item.questionIndex);
+            // 题目未答完，填充答案为空
+            questionnaireInfo.questions.slice(0, length - 1).forEach(item => {
+              if (!hasAnswerIndexList.includes(item.index)) {
+                answers.push({
+                  questionIndex: item.index,
+                  questionId: item._id,
+                  selected: null
+                })
+              }
+            })
+            this.setData({ answers })
+          }
+          const score = this.calculateScore()
+          await this.pullAnswers({
+            userId: userInfo._id,
+            questionnaireId: this.data.questionnaireInfo._id,
+            questionnaireName: this.data.questionnaireInfo.name,
+            answers: this.data.answers,
+            score,
+            isFinish: true
+          })
+          this.navigateToAnswer(score)
+        })
+        .catch(() => {
+          // on cancel
+        });
+      }
+     
+    } else {
+      // 中途退出
+      const { answers, questionnaireInfo } = this.data
+      const length = questionnaireInfo.questions.length
+      if (answers.length < length - 1) {
+        const hasAnswerIndexList = answers.map(item => item.questionIndex);
+        // 题目未答完，填充答案为空
+        questionnaireInfo.questions.slice(0, length - 1).forEach(item => {
+          if (!hasAnswerIndexList.includes(item.index)) {
+            answers.push({
+              questionIndex: item.index,
+              questionId: item._id,
+              selected: null
+            })
+          }
+        })
+        this.setData({ answers })
+      }
+      const score = this.calculateScore()
+      await this.pullAnswers({
+        userId: userInfo._id,
+        questionnaireId: this.data.questionnaireInfo._id,
+        questionnaireName: this.data.questionnaireInfo.name,
+        answers: this.data.answers,
+        score,
+        isFinish: false
       })
-      .catch(() => {
-        // on cancel
-      });
+      this.navigateToAnswer(score)
     }
   },
   // 推送答案
-  async pullAnswers({ userId, questionnaireId, answers, score, isFinish }) {
+  async pullAnswers({ userId, questionnaireId, questionnaireName, answers, score, isFinish }) {
     this.setData({ submitLoading: true })
     try {
       await requestCloud('studyAbroadAssistant', {
         type: 'submitEstimate',
         userId,
         questionnaireId,
+        questionnaireName,
         answers,
         score,
         isFinish
@@ -210,7 +248,7 @@ Page({
   // 计算得分并跳转到得分页
   calculateScore() {
     const { answers } = this.data
-    const { questions } = this.data.questionInfo
+    const { questions } = this.data.questionnaireInfo
 
     let bigPoint = 0,
       smallPoint = 0
@@ -228,7 +266,7 @@ Page({
     }
   },
   // 跳转答案页
-  navigateToRecord(score) {
+  navigateToAnswer(score) {
     wx.navigateTo({
       url: '/packageCharts/pages/answer/index',
       success: res => {

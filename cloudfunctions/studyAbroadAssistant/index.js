@@ -16,8 +16,12 @@ exports.main = async (event, context) => {
       return await questionnaire.getQuestionnaireInfo(event, context)
     case 'submitEstimate':
       return await record.submitEstimate(event, context)
-    case 'getRecord':
-      return await record.getRecord(event, context)
+    case 'getRecordList':
+      return await record.getRecordList(event, context)
+    case 'getRecordInfo':
+      return await record.getRecordInfo(event, context)
+    case 'getAnswerInfo':
+      return await record.getAnswerInfo(event, context)
     case 'getUniversityList':
       return await university.getUniversityList(event, context)
   }

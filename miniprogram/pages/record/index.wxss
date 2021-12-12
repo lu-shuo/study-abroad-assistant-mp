@@ -1,5 +1,15 @@
-/* pages/universities/index.wxss */
-.university-cell {
+/* pages/history/index.wxss */
+.record-container {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.record-cell {
   box-sizing: border-box;
   width: 90%;
   height: 200rpx;
@@ -11,7 +21,7 @@
   flex-direction: row;
 }
 .left {
-  flex: 3;
+  flex: 2;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -21,22 +31,26 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: flex-end;
 }
 .name {
   font-size: 16px;
 }
-.english-name {
+.score {
   font-size: 16px;
-  color: gray;
+  color: #2f80ed;
   /* color: rgba(255, 255, 255, 0.295); */
 }
-.qs {
+.time {
   font-size: 14px;
-  color: #2f80ed;
+  color: grey;
 }
-.university-icon {
-  width: 150rpx;
-  height: 150rpx;
+
+.finish {
+  font-size: 16px;
+}
+.not-finish {
+  color: #2f80ed!important;
 }
 .loading {
   position: relative;

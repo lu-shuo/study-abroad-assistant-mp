@@ -1,6 +1,6 @@
 <!--pages/universities/index.wxml-->
 <view class="university-container">
-  <scroll-view scroll-y="true" bindscrolltolower="searchScrollLower">
+  <scroll-view scroll-y="true">
     <view class="university-cell" wx:for="{{dataList}}" wx:key="_id">
       <view class="left">
         <view class="name">{{item.name}}</view>
@@ -14,14 +14,11 @@
         ></image>
       </view>
     </view>
-    <!-- <view>
-      <van-loading type="spinner" color="#1989fa" size="24px" hidden="{{!loadMore}}">加载中...</van-loading>
-    </view> -->
     
     <view class="loading" hidden="{{!loadMore}}">
       <van-loading type="spinner" color="#2f80ed" size="24px" hidden="{{!loadMore}}" />
       <span style="margin-left: 10rpx;">正在载入更多...</span>
     </view>
-    <view class="loading" hidden="{{!loadAll}}">已加载全部</view>
+    <view class="loading" style="color: gray;" hidden="{{!loadAll}}">已加载全部</view>
   </scroll-view>
 </view>

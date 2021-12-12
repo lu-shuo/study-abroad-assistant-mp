@@ -3,7 +3,7 @@
   <view class="block">
     <view class="block-content">
       <view class="row">
-        <text>总得分</text>
+        <text>得分</text>
         <text class="score">75</text>
       </view>
     </view>
@@ -11,7 +11,7 @@
   <view class="block">
     <view class="block-content">
       <view class="column">
-        <view class="title"><text>得分分类</text></view>
+        <view class="title"><text>分析</text></view>
         <view class="chart-wrapper">
           <ec-canvas id="mychart-dom-pie" canvas-id="score-pie" ec="{{ ec }}"></ec-canvas>
         </view>
