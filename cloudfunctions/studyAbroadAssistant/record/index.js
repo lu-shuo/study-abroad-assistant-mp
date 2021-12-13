@@ -1,5 +1,4 @@
 const cloud = require('wx-server-sdk')
-const { main } = require('..')
 
 cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV
@@ -65,18 +64,21 @@ exports.getRecordInfo = async (event) => {
   const { recordId } = event
 
   try {
-    const result = await record.aggregate().match({ _id: recordId })
-    .lookup({
-      from: 'questionnaire',
-      let: {
-        questionnaireId: '$questionnaireId',
-      },
-      pipeline: $.pipeline()
-        .match(_.expr(_.eq(['$_id', '$$questionnaireId'])))
-        .done(),
-      as: 'questionnaireInfo',
+    const result = await record.doc(recordId).get()
+
+    const { questionnaireName } = result.data
+
+    const res = await cloud.callFunction({
+      name: 'studyAbroadAssistant',
+      data: {
+        type: 'getQuestionnaireInfo',
+        name: questionnaireName
+      }
     })
-    .end()
+    
+    const questionnaireInfo = res.result.result.list[0]
+
+    result.data.questionnaireInfo = questionnaireInfo
     
     return {
       code: 0,
@@ -94,77 +96,124 @@ exports.getAnswerInfo = async (event) => {
   const { recordId } = event
 
   try {
-    const result = await record.aggregate().match({ _id: recordId })
-    .lookup({
-      from: 'questionnaire',
-      let: {
-        questionnaireId: '$questionnaireId',
-      },
-      pipeline: $.pipeline()
-        .match(_.expr(_.eq(['$_id', '$$questionnaireId'])))
-        .done(),
-      as: 'questionnaireInfo',
-    })
-    .end()
+    const result = await record.doc(recordId).get()
 
-    console.log(result)
+    const { questionnaireName } = result.data
+
+    const res = await cloud.callFunction({
+      name: 'studyAbroadAssistant',
+      data: {
+        type: 'getQuestionnaireInfo',
+        name: questionnaireName
+      }
+    })
+    
+    const questionnaireInfo = res.result.result.list[0]
+
+    result.data.questionnaireInfo = questionnaireInfo
 
     let chartData = {}
-    let bigPointChartData
+    let bigPointChartData = []
+    let smallPointChartData = []
 
-    if (result.list && result.list.length) {
-      let tempObj
-      // const answerInfo = result.data[0]
-      const { answers, questionnaireInfo } = result.list[0]
-      const { questions } = questionnaireInfo[0]
+    let tempObj = {}
+    // const answerInfo = result.data[0]
+    const { answers } = result.data
+    const { questions } = questionnaireInfo
+    questions.forEach(q => {
+      if (!tempObj[q.mainSort]) {
+        tempObj[q.mainSort] = []
+      }
+    })
+    
+    Object.keys(tempObj).forEach(mainSort => {
       questions.forEach(q => {
-        if (!tempObj[q.mainSort]) {
-          tempObj[q.mainSort] = []
+        if (q.mainSort === mainSort) {
+          if (tempObj[mainSort].length === 0 || !tempObj[mainSort].some(item => item.name === q.subSort)) {
+            tempObj[mainSort].push({
+              name: q.subSort,
+              value: 0
+            })
+          }
         }
       })
+    })
 
-      Object.keys(tempObj).forEach(mainSort => {
-        questions.forEach(q => {
-          if (q.mainSort === mainSort) {
-            if (tempObj[mainSort].length === 0 || !tempObj[mainSort].some(item => item.name === q.subSort)) {
-              tempObj[mainSort].push({
-                name: q.subSort,
-                val: 0
-              })
-            }
-          }
-        })
-      })
-      Object.values(tempObj).forEach(item => {
-        const {name} = item
+    let smallPointTemp = JSON.parse(JSON.stringify(tempObj))
+    let bigPointTemp = JSON.parse(JSON.stringify(tempObj))
+
+    Object.values(bigPointTemp).forEach(subArray => {
+      subArray.forEach(sub => {
+        const {name} = sub
         questions.forEach(q => {
           if (q.subSort === name) {
-            let selected, qBigPoint
+            let selected = null, qBigPoint = 0
             const index = answers.findIndex(a => a.questionId === q._id)
             if (index !== -1) {
               selected = answers[index].selected
             }
-            qBigPoint = q.options.map(option => {
-              if (option.title === selected) {
-                return option.bigPoint
-              }
-            })
-            item.val += qBigPoint
+            if (selected !== null) {
+              q.options.some(option => {
+                if (option.title === selected) {
+                  qBigPoint = option.bigPoint
+                  return true
+                }
+              })
+            } else {
+              qBigPoint = 0
+            }   
+            sub.value += qBigPoint
           }
         })
       })
-      Object.keys(tempObj).forEach(key => {
-        bigPointChartData.push({
-          name: key,
-          children: tempObj[key]
+    })
+
+    Object.values(smallPointTemp).forEach(subArray => {
+      subArray.forEach(sub => {
+        const {name} = sub
+        questions.forEach(q => {
+          if (q.subSort === name) {
+            let selected = null, qSmallPoint = 0
+            const index = answers.findIndex(a => a.questionId === q._id)
+            if (index !== -1) {
+              selected = answers[index].selected
+            }
+            if (selected !== null) {
+              q.options.some(option => {
+                if (option.title === selected) {
+                  qSmallPoint = option.smallPoint
+                  return true
+                }
+              })
+            } else {
+              qSmallPoint = 0
+            }   
+            sub.value += qSmallPoint
+          }
         })
       })
-      
-    }
-    
-    chartData.bigPoint = bigPointChartData
+    })
 
-    result.list[0].chartData = chartData
+    Object.keys(bigPointTemp).forEach(key => {
+      bigPointChartData.push({
+        name: key,
+        children: bigPointTemp[key]
+      })
+    })
+
+    Object.keys(smallPointTemp).forEach(key => {
+      smallPointChartData.push({
+        name: key,
+        children: smallPointTemp[key]
+      })
+    })
+
+    chartData = {
+      'bigPoint': bigPointChartData,
+      'smallPoint': smallPointChartData
+    }
+
+    result.data.chartData = chartData
 
     return {
       code: 0,

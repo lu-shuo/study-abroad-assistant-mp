@@ -1,7 +1,6 @@
 <!--pages/history/index.wxml-->
 <wxs module="dateUtil" src="../../utils/index.wxs"></wxs>
 <view class="record-container">
-  <van-loading wx:if="{{loading}}" type="spinner" color="#2f80ed" size="50" custom-class="van-loading"/>
   <scroll-view
     wx:if="{{recordList.length}}"
     style="height: 100%;"

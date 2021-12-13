@@ -1,46 +1,13 @@
 // pages/answer/index.js
 import * as echarts from '../../ec-canvas/echarts'
 
-let chart = null
-
-function initChart(canvas, width, height, dpr) {
-  chart = echarts.init(canvas, null, {
-    width: width,
-    height: height,
-    devicePixelRatio: dpr // new
-  });
-  canvas.setChart(chart);
-
-  var option = {
+function setOption(chart, chartData) {
+  const option = {
     color: [
-      "#c12e34",
-      "#e6b600",
-      "#0098d9",
-      "#2b821d",
-      "#005eaa",
-      "#339ca8",
-      "#cda819",
-      "#32a487",
-      "#2ec7c9",
-      "#b6a2de",
-      "#5ab1ef",
-      "#ffb980",
-      "#d87a80",
-      "#8d98b3",
-      "#e5cf0d",
-      "#97b552",
-      "#95706d",
-      "#dc69aa",
-      "#07a2a4",
-      "#9a7fd1",
-      "#588dd5",
-      "#f5994e",
-      "#c05050",
-      "#59678c",
-      "#c9ab00",
-      "#7eb00a",
-      "#6f5553",
-      "#c14089"
+      "#3fb1e3",
+      "#6be6c1",
+      "#626c91",
+      "#a0a7e6"
     ],
     series: {
       type: 'sunburst',
@@ -49,56 +16,27 @@ function initChart(canvas, width, height, dpr) {
       // },
       data: [
         {
-          name: '技能',
-          children: [
+          "name": "技能",
+          "children": [
             {
-              name: '语言能力',
-              value: 10
-            },
-            {
-              name: '社交技巧',
-              value: 20,
+              "name": "语言能力",
+              "value": 64.5
             }
           ]
         },
         {
-          name: '哈哈',
-          children: [
+          "name": "知识",
+          "children": [
             {
-              name: '语言能力',
-              value: 10
-            },
-            {
-              name: '社交技巧',
-              value: 20,
-            }
-          ]
-        },
-        {
-          name: '知识',
-          children: [
-            {
-              name: '学习成绩',
-              value: 30
-            },
-            {
-              name: '雅思',
-              value: 20
-            },
-            {
-              name: '托福',
-              value: 40
-            },
-            {
-              name: 'GRE',
-              value: 10
+              "name": "学业表现",
+              "value": 72
             }
           ]
         }
       ],
       // 相对的百分比
       position: ['50%', '50%'],
-      radius: [0, '90%'],
+      radius: [0, '95%'],
       levels: [
         {},
         {
@@ -109,37 +47,46 @@ function initChart(canvas, width, height, dpr) {
         },
         {
           label: {
-            rotate: 'radial',
+            rotate: 'tangential',
             formatter: '{b}: {c}'
           }
         },
-        // {
-        //   itemStyle: {
-        //     color: '#FFC75F'
-        //   },
-        //   label: {
-        //     rotate: 0
-        //   }
-        // }
       ],
     }
   };
-
   chart.setOption(option);
-  return chart;
 }
 
 Page({
-
   /**
    * 页面的初始数据
    */
   data: {
-    bigPoint: 0,
-    smallPoint: 0,
+    answerInfo: null,
     ec: {
-      onInit: initChart
+      lazyLoad: true
     }
+  },
+
+  // 点击按钮后初始化图表
+  init: function (chartData) {
+    console.log(this.ecComponent)
+    this.ecComponent.init((canvas, width, height, dpr) => {
+      // 获取组件的 canvas、width、height 后的回调函数
+      // 在这里初始化图表
+      const chart = echarts.init(canvas, null, {
+        width: width,
+        height: height,
+        devicePixelRatio: dpr // new
+      });
+      setOption(chart, chartData);
+
+      // 将图表实例绑定到 this 上，可以在其他成员函数（如 dispose）中访问
+      this.chart = chart;
+
+      // 注意这里一定要返回 chart 实例，否则会影响事件处理等
+      return chart;
+    });
   },
 
   /**
@@ -148,22 +95,19 @@ Page({
   onLoad: function (options) {
     const eventChannel = this.getOpenerEventChannel()
     // 事件名和上个页面设置的相同即可
-    eventChannel.on('setScore', ({
-      score
+    eventChannel.on('setAnswerInfo', ({
+      answerInfo
     }) => {
-      this.setData({
-        bigPoint: score.bigPoint,
-        smallPoint: score.smallPoint
-      })
+      this.setData({answerInfo})
     })
+    console.log(this.data.answerInfo)
+     // 获取组件
+    this.ecComponent = this.selectComponent('#mychart-dom-sun');
+    // this.init(this.data.answerInfo.chartData.bigPoint)
+    this.init()
   },
 
-  onReady() {
-    setTimeout(function () {
-      // 获取 chart 实例的方式
-      // console.log(chart)
-    }, 2000);
-  },
+  
 
   /**
    * 生命周期函数--监听页面卸载

@@ -10,7 +10,6 @@ Page({
    * 页面的初始数据
    */
   data: {
-    loading: false,
     userId: null,
     recordList: [],
     loadMore: false, //"上拉加载"的变量，默认false，隐藏  
@@ -91,30 +90,30 @@ Page({
   },
   async jumpToAnswer(id) {
     try {
-      this.setData({loading: true})
-      console.log(id)
-      const res = await requestCloud('studyAbroadAssistant', {
+      wx.showLoading({
+        mask: true
+      })
+      const { result } = await requestCloud('studyAbroadAssistant', {
         type: 'getAnswerInfo',
         recordId: id
       })
-      console.log(res)
-      // this.setData({loading: false})
-      // if (result.data && result.data.length) {
-      //   wx.navigateTo({
-      //     url: '/packageCharts/pages/answer/index',
-      //     success: res => {
-      //       // 这里给要打开的页面传递数据.  第一个参数:方法key, 第二个参数:需要传递的数据
-      //       res.eventChannel.emit('setAnswerInfo', {
-      //         answerInfo: result.data[0],
-      //       })
-      //     },
-      //   })
-      // }
+      wx.hideLoading()
+
+      if (result.data) {
+        wx.navigateTo({
+          url: '/packageCharts/pages/answer/index',
+          success: res => {
+            // 这里给要打开的页面传递数据.  第一个参数:方法key, 第二个参数:需要传递的数据
+            res.eventChannel.emit('setAnswerInfo', {
+              answerInfo: result.data,
+            })
+          },
+        })
+      }
     } catch (error) {
       console.error(error)
-      this.setData({loading: false})
+      wx.hideLoading() 
     }
-
   },
   async jumpToQuestionnaire(id) {
     try {
