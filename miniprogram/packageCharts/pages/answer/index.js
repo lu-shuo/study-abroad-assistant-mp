@@ -62,15 +62,30 @@ Page({
    * 页面的初始数据
    */
   data: {
+    activeNames: ['1'],
     answerInfo: null,
     ec: {
       lazyLoad: true
-    }
+    },
+    isDisposed: false
   },
-
+  onChange(event) {
+    this.setData({
+      activeNames: event.detail,
+    });
+  },
+  onClose(event) {
+    this.dispose()
+  },
+  onOpen(event) {
+    this.setData({isDisposed: false})
+    this.init()
+  },
   // 点击按钮后初始化图表
   init: function (chartData) {
-    console.log(this.ecComponent)
+     // 获取组件
+    this.ecComponent = this.selectComponent('#mychart-dom-sun');
+    // console.log(this.ecComponent)
     this.ecComponent.init((canvas, width, height, dpr) => {
       // 获取组件的 canvas、width、height 后的回调函数
       // 在这里初始化图表
@@ -84,11 +99,24 @@ Page({
       // 将图表实例绑定到 this 上，可以在其他成员函数（如 dispose）中访问
       this.chart = chart;
 
+      this.setData({
+        isDisposed: false
+      });
+
+
       // 注意这里一定要返回 chart 实例，否则会影响事件处理等
       return chart;
     });
   },
+  dispose: function () {
+    if (this.chart) {
+      this.chart.dispose();
+    }
 
+    this.setData({
+      isDisposed: true
+    });
+  },
   /**
    * 生命周期函数--监听页面加载
    */
@@ -101,8 +129,7 @@ Page({
       this.setData({answerInfo})
     })
     console.log(this.data.answerInfo)
-     // 获取组件
-    this.ecComponent = this.selectComponent('#mychart-dom-sun');
+    
     // this.init(this.data.answerInfo.chartData.bigPoint)
     this.init()
   },

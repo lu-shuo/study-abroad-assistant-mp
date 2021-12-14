@@ -11,6 +11,7 @@ Page({
    */
   data: {
     dataList: [],
+    isFirst: true,
     loadMore: false, //"上拉加载"的变量，默认false，隐藏  
     loadAll: false //“没有数据”的变量，默认false，隐藏 
   },
@@ -24,30 +25,40 @@ Page({
       }) 
     }
     try {
+      if (this.data.isFirst) {
+        wx.showLoading({
+          mask: true
+        })
+      }
       const { result } = await requestCloud('studyAbroadAssistant', {
         type: 'getUniversityList',
         pageSize,
         pageNo
       })
+      wx.hideLoading()
       if (result.data && result.data.length) {
         pageNo ++
         const list = this.data.dataList.concat(result.data)
         this.setData({
           dataList: list,
-          loadMore: false
+          loadMore: false,
+          isFirst: false
         })
         console.log(this.data.dataList)
       } else {
         this.setData({
           loadAll: true, // 把“没有数据”设为true，显示  
-          loadMore: false // 把"上拉加载"的变量设为false，隐藏  
+          loadMore: false, // 把"上拉加载"的变量设为false，隐藏  
+          isFirst: false
         });
       }
     } catch (error) {
+      wx.hideLoading()
       console.error(error)
       this.setData({
         loadAll: false,
-        loadMore: false
+        loadMore: false,
+        isFirst: false
       });
     }
   },
