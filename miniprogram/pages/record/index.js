@@ -28,7 +28,6 @@ Page({
   },
 
   async getRecordList() {
-    
     let id,
       userId = this.data.userId
 
@@ -47,6 +46,10 @@ Page({
       }) 
     }
     try {
+      wx.showLoading({
+        mask: true,
+        title: '请稍后'
+      })
       const { result } = await requestCloud('studyAbroadAssistant', {
         type: 'getRecordList',
         pageSize,
@@ -61,24 +64,24 @@ Page({
           recordList: list,
           loadMore: false,
         })
-
+        wx.hideLoading()
       } else {
         this.setData({
           loadAll: true, // 把“没有数据”设为true，显示  
           loadMore: false // 把"上拉加载"的变量设为false，隐藏  
         });
+        wx.hideLoading()
       }
     } catch (error) {
       console.error(error)
+      wx.hideLoading()
       this.setData({
         loadAll: false,
         loadMore: false
       });
     }
-
   },
   handleCellClick(e) {
-    console.log(e.currentTarget.dataset)
     const { isfinish: isFinish, recordid: recordId } = e.currentTarget.dataset
     if (isFinish) {
       // 已完成跳转答案页
@@ -91,7 +94,8 @@ Page({
   async jumpToAnswer(id) {
     try {
       wx.showLoading({
-        mask: true
+        mask: true,
+        title: '请稍后'
       })
       const { result } = await requestCloud('studyAbroadAssistant', {
         type: 'getAnswerInfo',
@@ -100,6 +104,7 @@ Page({
       wx.hideLoading()
 
       if (result.data) {
+        result.data.fromRecord = true
         wx.navigateTo({
           url: '/packageCharts/pages/answer/index',
           success: res => {
@@ -123,15 +128,16 @@ Page({
         recordId: id
       })
       this.setData({loading: false})
-      if (result.data && result.data.length) {
+      if (result.data) {
+        wx.setStorageSync('recordInfo', result.data)
         wx.navigateTo({
-          url: `/pages/questionnaire/index`,
-          success: res => {
-            // 这里给要打开的页面传递数据.  第一个参数:方法key, 第二个参数:需要传递的数据
-            res.eventChannel.emit('setRecord', {
-              recordInfo: result.data[0],
-            })
-          },
+          url: `/pages/questionnaire/index?from=record`,
+          // success: res => {
+          //   // 这里给要打开的页面传递数据.  第一个参数:方法key, 第二个参数:需要传递的数据
+          //   res.eventChannel.emit('setRecordInfo', {
+          //     recordInfo: result.data,
+          //   })
+          // },
         });
       }
     } catch (error) {
@@ -142,6 +148,21 @@ Page({
   handleScrolltolower() {
     if (!this.data.loadAll)
       this.getRecordList()
+  },
+ async handleDeleteRecord(e) {
+    const {id, index} = e.currentTarget.dataset
+    try {
+      await requestCloud('studyAbroadAssistant', {
+        type: 'deleteRecord',
+        recordId: id
+      })
+      const {recordList} = this.data
+      recordList.splice(index, 1)
+      this.setData({recordList})
+      // this.getRecordList()
+    } catch (error) {
+      console.error(error)
+    }
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

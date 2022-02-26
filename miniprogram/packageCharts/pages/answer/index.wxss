@@ -14,8 +14,8 @@
 }
 
 .collapse-item .van-cell__title{
-  font-weight: 400!important;
-  font-size: 35rpx!important;
+  /* font-weight: 400!important; */
+  font-size: 16px!important;
 }
 
 .block {
@@ -34,6 +34,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  font-size: 16px;
 }
 
 .column {

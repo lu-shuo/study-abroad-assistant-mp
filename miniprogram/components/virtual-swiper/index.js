@@ -14,6 +14,10 @@ Component({
         type: Array,
         value: []
       },
+      onlyRead: { // 只读
+        type: Boolean,
+        value: false
+      },
       current: { // 真实索引
         type: Number,
         value: 0
@@ -58,8 +62,8 @@ Component({
      */
     methods: {
       init(realIndex) {
-        // console.log(realIndex, typeof realIndex)
         const { list } = this.data
+        
         if (!list || !list.length) return
         const virtualIndex = realIndex % VIRTUAL_SWIPER_LENGTH 
         // 初始化虚拟列表
@@ -69,7 +73,7 @@ Component({
         // 2. 获取前后项数据
         virtualList[this.getLastVirtualIndex(virtualIndex)] = this.getLastItem(list, realIndex)
         virtualList[this.getNextVirtualIndex(virtualIndex)] = this.getNextItem(list, realIndex)
-        // console.log('[initList]：', virtualList)
+
         this.setData({
           virtualSwiperIndex: virtualIndex,
           virtualSwiperCurrent: virtualIndex,
@@ -94,7 +98,7 @@ Component({
         if (realIndex === list.length - 1) return null
         return list[realIndex + 1]
       },
-
+      // 切换swiper 
       swiperChange(e) {
         const current = e.detail.current
         const lastIndex = this.data.virtualSwiperIndex
@@ -117,6 +121,7 @@ Component({
           this.setData({
             [`virtualSwiperList[${this.getNextVirtualIndex(current)}]`]: this.getNextItem(this.data.list, currentItem.index)
           })
+          console.log(this.data.virtualSwiperList)
         }
         if (isBackward) {
           if (currentItem === null) {
@@ -132,6 +137,7 @@ Component({
             [`virtualSwiperList[${this.getLastVirtualIndex(current)}]`]: this.getLastItem(this.data.list, currentItem.index)
           })
         }
+        // console.log('swiperChange', this.data.virtualSwiperList);
         // 更新virtualSwiperIndex值
         this.setData({ virtualSwiperIndex: current })
         // 触发事件
@@ -141,11 +147,14 @@ Component({
       handleOptionSelect(e) {
         this.triggerEvent('optionConfirm', e.detail)
       },
+      handlePickerOptionSelect(e) {
+        this.triggerEvent('pickerOptionConfirm', e.detail)
+      },
       handleRecordClick(e) {
         this.triggerEvent('recordClick', e.detail)
       },
-      handleConfirmAnswer(e) {
-        this.triggerEvent('confirmAnswer', e.detail)
+      handleAnswerSubmit(e) {
+        this.triggerEvent('answerSubmit', e.detail)
       }
     }
 })

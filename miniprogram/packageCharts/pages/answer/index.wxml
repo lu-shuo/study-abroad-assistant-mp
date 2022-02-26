@@ -2,14 +2,30 @@
 <view class="container">
   <view class="block">
     <view class="block-content">
+      <view class="row" bindtap="jumpToQuestion">
+        <view>
+          <text>问卷名</text>
+        </view>
+        <view>
+          <text class="score">{{answerInfo.questionnaireName}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="block">
+    <view class="block-content">
       <view class="row">
         <view>
           <text>得分</text>
         </view>
-        <text class="score">75</text>
+        <view>
+          <text class="score">大分：{{answerInfo.score.bigPoint}}</text> | 
+          <text class="score">小分：{{answerInfo.score.smallPoint}}</text>
+        </view>
       </view>
     </view>
   </view>
+  
   <van-collapse
     value="{{ activeNames }}"
     bind:change="onChange"
@@ -21,7 +37,6 @@
     <van-collapse-item title="分析" name="1" custom-class="collapse-item">
       <view class="chart-wrapper">
         <ec-canvas wx:if="{{!isDisposed}}" id="mychart-dom-sun" canvas-id="score-pie" ec="{{ ec }}"></ec-canvas>
-        
       </view>
     </van-collapse-item>
   </van-collapse>

@@ -114,6 +114,7 @@
     type="date"
     value="{{ currentDate }}"
     bind:confirm="onTimePickerConfirm"
+    bind:cancel="onTimePickerCancel"
     min-date="{{ minDate }}"
     formatter="{{ formatter }}"
   />

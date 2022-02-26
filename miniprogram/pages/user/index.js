@@ -93,6 +93,9 @@ Page({
       });
     }
   },
+  onTimePickerCancel() {
+    this.setData({showTimePicker: false})
+  },
   onLogout() {
     this.setData({
       userInfo: {},

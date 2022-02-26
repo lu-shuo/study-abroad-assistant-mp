@@ -1,5 +1,5 @@
 <!--pages/questionnaire/components/item/index.wxml-->
-<scroll-view style="height:{{height}}px" scroll-y >
+<scroll-view style="height:{{height}}px" scroll-y>
   <view class="question-wrapper" wx:if="{{info.qType !== -1}}">
     <!-- <van-tag size="medium" type="primary" custom-class="tag">{{info.qType === 0 ? '单选': '多选'}}</van-tag> -->
     <!-- <van-tag size="medium" type="primary" custom-class="tag">{{info.mainSort}}</van-tag>
@@ -7,45 +7,65 @@
     <view class="tag-wrapper">
       <van-tag size="medium" type="primary" custom-class="tag">{{info.qType === 0 ? '单选': '多选'}}</van-tag>
       <view>
-        <van-tag size="medium" round  type="primary" custom-class="tag">{{info.mainSort}}</van-tag>
-        <van-tag size="medium" round  type="primary" >{{info.subSort}}</van-tag>
+        <van-tag size="medium" round type="primary" custom-class="tag">{{info.mainSort}}</van-tag>
+        <van-tag size="medium" round type="primary">{{info.subSort}}</van-tag>
       </view>
     </view>
-    
-    <view class="content">
-      <view class="title">{{info.title}}</view>
+
+    <view class="content" class="{{onlyRead ? 'disabled': ''}}">
+      <view class="title">
+        {{info.title}}
+        <text class="multi-tip" wx:if="{{info.qType === 1 && !onlyRead}}">(勾选所有要选择项后请点击确定)</text>
+        <text class="multi-tip" wx:if="{{info.qType === 2 && !onlyRead}}">(点击选项触发选择器，选择完请点击确定)</text>
+      </view>
       <view class="single-option" wx:if="{{info.qType === 0}}">
-        <van-radio-group
-          value="{{ info.selected }}"
-          bind:change="onOptionSelect"
-        >
-          <van-radio
-            wx:for="{{info.options}}"
-            wx:key="index"
-            wx:for-item="option"
-            name="{{option.title}}"
-            custom-class="option"
-            icon-size="30px"
-            label-class="radio-label"
-          >
+        <van-radio-group value="{{ info.selected }}" bind:change="onSingleOptionSelect">
+          <van-radio wx:for="{{info.options}}" wx:key="index" wx:for-item="option" name="{{option.title}}" custom-class="option" icon-size="30px" label-class="radio-label">
             {{option.title}}. {{option.content}}
           </van-radio>
         </van-radio-group>
+      </view>
+      <view class="multi-option" wx:if="{{info.qType === 1}}">
+        <van-checkbox-group value="{{ multiSelected }}" bind:change="onMultiOptionSelect">
+          <van-checkbox wx:for="{{info.options}}" wx:key="index" wx:for-item="option" name="{{option.title}}" custom-class="option" icon-size="30px" label-class="radio-label">
+            {{option.title}}. {{option.content}}
+          </van-checkbox>
+        </van-checkbox-group>
+        <van-button wx:if="{{!onlyRead}}" round size="normal" bind:click="multiOptionConfirm" custom-class="confirm-btn" disabled="{{disableMultiConfirm}}">确定</van-button>
+      </view>
+      <view class="multi-option" wx:if="{{info.qType === 2}}">
+        <view
+          wx:for="{{info.options}}"
+          wx:key="index"
+          wx:for-item="option"
+          class="option picker-content"
+          data-index="{{index}}"
+          bindtap="showPopup"
+        >
+          {{option.title}}. {{option.content}}
+          <text class="picker-content-num"> {{option.selected}} </text>
+          次
+        </view>
+        <van-popup show="{{ show }}" round position="bottom" custom-style="height: 40%" bind:close="onPickerClose">
+          <van-picker
+            custom-class="picker-wrapper"
+            columns="{{ columnsArr[currentPickerIndex] }}"
+            show-toolbar
+            title="请选择次数"
+            bind:cancel="onPickerClose"
+            bind:confirm="onPickerConfirm"
+          />
+        </van-popup>
+        <van-button wx:if="{{!onlyRead}}" round size="normal" bind:click="pickerOptionConfirm" custom-class="confirm-btn">确定</van-button>
       </view>
     </view>
   </view>
   <view class="record-wrapper" wx:else>
     <view class="record-box">
-      <view
-        class="record {{item.selected !== null ? 'selected' : ''}}"
-        wx:for="{{info.answers}}"
-        wx:key="index"
-        data-index="{{item.index}}"
-        bindtap="handleRecordClick"
-      >
+      <view class="record {{item.selected !== null ? 'selected' : ''}}" wx:for="{{info.answers}}" wx:key="index" data-index="{{item.index}}" bindtap="handleRecordClick">
         {{index + 1}}
       </view>
     </view>
-    <van-button wx:if="{{!info.isRecord}}" round size="normal" bind:click="confirmAnswer" custom-class="confirm-btn">交卷</van-button>
+    <van-button round size="normal" bind:click="submitAnswer" custom-class="submit-btn">交卷</van-button>
   </view>
 </scroll-view>

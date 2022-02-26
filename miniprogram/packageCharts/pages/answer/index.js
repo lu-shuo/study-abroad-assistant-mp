@@ -4,41 +4,26 @@ import * as echarts from '../../ec-canvas/echarts'
 function setOption(chart, chartData) {
   const option = {
     color: [
-      "#3fb1e3",
-      "#6be6c1",
-      "#626c91",
-      "#a0a7e6"
+      "#5470c6",
+      "#91cc75",
+      "#fac858",
+      "#ee6666",
+      "#73c0de",
+      "#3ba272",
+      "#fc8452",
+      "#9a60b4",
+      "#ea7ccc"
     ],
     series: {
       type: 'sunburst',
       // emphasis: {
       //     focus: 'ancestor'
       // },
-      data: [
-        {
-          "name": "技能",
-          "children": [
-            {
-              "name": "语言能力",
-              "value": 64.5
-            }
-          ]
-        },
-        {
-          "name": "知识",
-          "children": [
-            {
-              "name": "学业表现",
-              "value": 72
-            }
-          ]
-        }
-      ],
+      data: chartData,
       // 相对的百分比
       position: ['50%', '50%'],
-      radius: [0, '95%'],
-      levels: [
-        {},
+      radius: [0, '100%'],
+      levels: [{},
         {
           label: {
             rotate: 'radial',
@@ -47,7 +32,7 @@ function setOption(chart, chartData) {
         },
         {
           label: {
-            rotate: 'tangential',
+            rotate: 'radial',
             formatter: '{b}: {c}'
           }
         },
@@ -62,7 +47,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    activeNames: ['1'],
+    activeNames: ['0'],
     answerInfo: null,
     ec: {
       lazyLoad: true
@@ -78,12 +63,14 @@ Page({
     this.dispose()
   },
   onOpen(event) {
-    this.setData({isDisposed: false})
+    this.setData({
+      isDisposed: false
+    })
     this.init()
   },
   // 点击按钮后初始化图表
-  init: function (chartData) {
-     // 获取组件
+  init: function (chartData = this.data.answerInfo.chartData.bigPoint) {
+    // 获取组件
     this.ecComponent = this.selectComponent('#mychart-dom-sun');
     // console.log(this.ecComponent)
     this.ecComponent.init((canvas, width, height, dpr) => {
@@ -102,8 +89,6 @@ Page({
       this.setData({
         isDisposed: false
       });
-
-
       // 注意这里一定要返回 chart 实例，否则会影响事件处理等
       return chart;
     });
@@ -126,43 +111,34 @@ Page({
     eventChannel.on('setAnswerInfo', ({
       answerInfo
     }) => {
-      this.setData({answerInfo})
+      this.setData({
+        answerInfo
+      })
     })
-    console.log(this.data.answerInfo)
-    
-    // this.init(this.data.answerInfo.chartData.bigPoint)
-    this.init()
   },
-
-  
-
   /**
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-    wx.reLaunch({
-      url: '/pages/estimate/index',
-    })
+    if (!this.data.answerInfo.fromRecord) {
+      wx.reLaunch({
+        url: '/pages/estimate/index',
+      })
+    }
   },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
+  jumpToQuestion() {
+    const {answerInfo} = this.data
+    answerInfo.fromAnswer = true
+    wx.setStorageSync('recordInfo', answerInfo)
+    wx.navigateTo({
+      url: `/pages/questionnaire/index?from=answer`,
+      // success: res => {
+      //   // 这里给要打开的页面传递数据.  第一个参数:方法key, 第二个参数:需要传递的数据
+      //   res.eventChannel.emit('setRecordInfo', {
+      //     recordInfo: answerInfo,
+      //     fromAnswer: true
+      //   })
+      // },
+    });
   },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
-  }
 })

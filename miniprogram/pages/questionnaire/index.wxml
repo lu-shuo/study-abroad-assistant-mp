@@ -5,8 +5,10 @@
     <view class="header">
       <van-cell-group inset>
         <van-cell title="{{questionnaireInfo.name}}" title-class="questionnaire-name"  size="large">
-          <view class="question-progress" wx:if="{{currentIndex !== questionnaireInfo.questions.length - 1}}">
-            <view class="total">{{questionnaireInfo.questions.length - 1}}</view>
+          <view class="question-progress"
+            wx:if="{{currentIndex !== total}}"
+          >
+            <view class="total">{{total}}</view>
             /
             <view class="current">{{currentIndex + 1}}</view>
           </view>
@@ -21,9 +23,11 @@
         duration="{{swiperDuration}}"
         current="{{current}}"
         list="{{questionnaireInfo.questions}}"
+        onlyRead="{{onlyRead}}"
         bind:optionConfirm="handleQuestionConfirm"
+        bind:pickerOptionConfirm="handlePickerQuestionConfirm"
         bind:recordClick="handleRecordClick"
-        bind:confirmAnswer="handleConfirmAnswer"
+        bind:answerSubmit="handleAnswerSubmit"
         bind:swiperChange="handleQuestionChange"
       />
     </view>

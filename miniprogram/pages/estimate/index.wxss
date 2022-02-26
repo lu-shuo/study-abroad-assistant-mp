@@ -25,18 +25,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.start-btn::before {
   animation: wave 1.5s ease-out infinite;  
 }
 @keyframes wave {
-  50%, 75% {
-    width: 350rpx;
-    height: 350rpx;
+  0% {
+    box-shadow: 0 0 0 0px rgba(47, 128, 237, 0.5);
   }
-
-  80%, 100% {
-    opacity: 0;
+  100% {
+    box-shadow: 0 0 0 30px rgba(255, 220, 1, 0);
   }
 }
 .body-tip {

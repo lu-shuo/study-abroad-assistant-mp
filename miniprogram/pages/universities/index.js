@@ -27,7 +27,8 @@ Page({
     try {
       if (this.data.isFirst) {
         wx.showLoading({
-          mask: true
+          mask: true,
+          title: '请稍后'
         })
       }
       const { result } = await requestCloud('studyAbroadAssistant', {

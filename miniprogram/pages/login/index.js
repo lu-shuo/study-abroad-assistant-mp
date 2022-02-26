@@ -19,16 +19,15 @@ Page({
     // 查看缓存中有无用户数据，有则更新缓存中用户数据跳转首页，没有则不跳转显示登录按钮
     const userInfo = wx.getStorageSync('userInfo')
     if (userInfo) {
-      // wx.switchTab({
-      //   url: '/pages/estimate/index',
-      //   // url: '/packageCharts/pages/answer/index',
-      //   success: () => {
-      //     this.login(userInfo, false)
-      //   }
-      // })
-      wx.navigateTo({
-        url: '/packageCharts/pages/answer/index',
+      wx.switchTab({
+        url: '/pages/estimate/index',
+        success: () => {
+          this.login(userInfo, false)
+        }
       })
+      // wx.navigateTo({
+      //   url: '/packageCharts/pages/answer/index',
+      // })
       return;
     }
     if (!wx.getUserProfile) {
@@ -76,52 +75,4 @@ Page({
       }
     })
   },
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
-  }
 })

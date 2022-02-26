@@ -11,10 +11,37 @@ const _ = db.command
 const $ = db.command.aggregate
 // event 就是小程序端调用云函数时传入的参数，外加后端自动注入的小程序用户的 openid 和小程序的 appid。
 // context 对象包含了此处调用的调用信息和运行状态，可以用它来了解服务运行的情况
-exports.submitEstimate = async (event, context) => {
+exports.addRecord = async (event, context) => {
   const { userId, questionnaireId, questionnaireName, answers, score, isFinish } = event
   try {
     const result = await record.add({
+      // data 字段表示需新增的 JSON 数据
+      data: {
+        userId,
+        questionnaireId,
+        questionnaireName,
+        answers,
+        score,
+        isFinish,
+        submitTime: new Date().getTime(),
+      }
+    })
+    return {
+      code: 0,
+      result
+    }
+  } catch (error) {
+    return {
+      code: 1,
+      error
+    }
+  }
+}
+
+exports.updateRecordInfo = async (event) => {
+  const { recordId, userId, questionnaireId, questionnaireName, answers, score, isFinish } = event
+  try {
+    const result = await record.doc(recordId).update({
       // data 字段表示需新增的 JSON 数据
       data: {
         userId,
@@ -153,12 +180,33 @@ exports.getAnswerInfo = async (event) => {
               selected = answers[index].selected
             }
             if (selected !== null) {
-              q.options.some(option => {
-                if (option.title === selected) {
-                  qBigPoint = option.bigPoint
-                  return true
+              // 多选
+              if (Array.isArray(selected)) {
+                let tempBigPoint = 0;
+                if (q.qType === 1) {
+                  selected.forEach(s => {
+                    q.options.forEach(option => {
+                      if (option.title === s) {
+                        tempBigPoint += option.bigPoint
+                      }
+                    })
+                  })
+                } else if (q.qType === 2) {
+                  selected.forEach((s, i) => {
+                    tempBigPoint += q.options[i].bigPoint * s
+                  })
                 }
-              })
+                if (q.maxBigScore)
+                  tempBigPoint = tempBigPoint <= q.maxBigScore ? tempBigPoint : q.maxBigScore
+                qBigPoint += tempBigPoint
+              } else {
+                q.options.some(option => {
+                  if (option.title === selected) {
+                    qBigPoint = option.bigPoint
+                    return true
+                  }
+                })
+              }
             } else {
               qBigPoint = 0
             }   
@@ -179,12 +227,33 @@ exports.getAnswerInfo = async (event) => {
               selected = answers[index].selected
             }
             if (selected !== null) {
-              q.options.some(option => {
-                if (option.title === selected) {
-                  qSmallPoint = option.smallPoint
-                  return true
-                }
-              })
+              // 多选
+              if (Array.isArray(selected)) {
+                let tempSmallPoint = 0
+                if (q.qType === 1) {
+                  selected.forEach(s => {
+                    q.options.forEach(option => {
+                      if (option.title === s) {
+                        tempSmallPoint += option.smallPoint
+                      }
+                    })
+                  })
+                } else if (q.qType === 2) {
+                  selected.forEach((s, i) => {
+                    tempSmallPoint += q.options[i].smallPoint * s
+                  })
+                } 
+                if (q.maxSmallScore)
+                  tempSmallPoint = tempSmallPoint <= q.maxSmallScore ? tempSmallPoint : q.maxSmallScore
+                qSmallPoint += tempSmallPoint
+              } else {
+                q.options.some(option => {
+                  if (option.title === selected) {
+                    qSmallPoint = option.smallPoint
+                    return true
+                  }
+                })
+              }
             } else {
               qSmallPoint = 0
             }   
@@ -215,6 +284,22 @@ exports.getAnswerInfo = async (event) => {
 
     result.data.chartData = chartData
 
+    return {
+      code: 0,
+      result
+    }
+  } catch (error) {
+    return {
+      code: 1,
+      error
+    }
+  }
+}
+
+exports.deleteRecord = async (event) => {
+  const { recordId } = event
+  try {
+    const result = await record.doc(recordId).remove()
     return {
       code: 0,
       result

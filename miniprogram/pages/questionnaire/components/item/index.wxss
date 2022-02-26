@@ -19,23 +19,54 @@
 .content {
   margin-top: 20rpx;
 }
+.disabled {
+  pointer-events: none;
+}
 .title {
   line-height: 200%;
   font-size: 20px;
 }
+.multi-tip {
+  font-size: 15px;
+  color: grey;
+}
 .single-option {
   margin-top: 20rpx;
-  padding: 0 20rpx;
+  /* padding: 0 20rpx; */
   font-size: 20px;
+}
+.multi-option {
+  margin: 20rpx 0;
+  /* padding: 0 20rpx; */
+  font-size: 20px;
+  position: relative;
 }
 /* .van-radio__icon {
   font-size: 30px!important;
 } */
-.option {
-  margin: 50rpx 0;
-}
 .radio-label {
   margin-left: 10rpx;
+  line-height: 30px!important;
+}
+.option {
+  font-size: 20px;
+  line-height: 30px;
+  color: #323233;
+  margin: 50rpx 0;
+}
+.picker-content {
+  /* padding-left: 10px; */
+  position: relative;
+}
+.picker-content-num {
+  display: inline-block;
+  width: 40px;
+  border-bottom: 1px solid black;
+  text-align: center;
+  color: #2f80ed;
+}
+.picker-wrapper {
+  height: 100%!important;
 }
 .record-wrapper {
   width: 100%;
@@ -66,6 +97,18 @@
   box-sizing: border-box;
 }
 .confirm-btn {
+  position: absolute!important;
+  z-index: 1;
+  bottom: -180rpx;
+  left: 50%;
+  transform: translate(-50%,-50%); /*自己的50% */
+  /* background: linear-gradient(to bottom, #56ccf2, #2f80ed)!important; */
+  background-color: #2f80ed!important;
+  color: white!important;
+  font-size: 13pt!important;
+  width: 90vw!important;
+}
+.submit-btn {
   position: absolute!important;
   z-index: 1;
   bottom: 20rpx;

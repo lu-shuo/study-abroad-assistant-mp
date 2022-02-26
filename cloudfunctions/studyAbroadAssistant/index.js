@@ -14,12 +14,16 @@ exports.main = async (event, context) => {
       return await user.getUserList(event, context)
     case 'getQuestionnaireInfo':
       return await questionnaire.getQuestionnaireInfo(event, context)
-    case 'submitEstimate':
-      return await record.submitEstimate(event, context)
+    case 'addRecord':
+      return await record.addRecord(event, context)
     case 'getRecordList':
       return await record.getRecordList(event, context)
     case 'getRecordInfo':
       return await record.getRecordInfo(event, context)
+    case 'updateRecordInfo':
+      return await record.updateRecordInfo(event, context)
+    case 'deleteRecord':
+      return await record.deleteRecord(event, context)
     case 'getAnswerInfo':
       return await record.getAnswerInfo(event, context)
     case 'getUniversityList':
