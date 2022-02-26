@@ -16,6 +16,11 @@ Page({
     loadAll: false //“没有数据”的变量，默认false，隐藏 
   },
 
+  onLoad: function (options) {
+    pageNo = 0
+    pageSize = 10
+  },
+
   async getListInfo() {
     if (this.data.loadMore) return
     if (pageNo > 0) {
@@ -45,7 +50,7 @@ Page({
           loadMore: false,
           isFirst: false
         })
-        console.log(this.data.dataList)
+        // console.log(this.data.dataList)
       } else {
         this.setData({
           loadAll: true, // 把“没有数据”设为true，显示  
@@ -62,19 +67,6 @@ Page({
         isFirst: false
       });
     }
-  },
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
   },
 
   /**
@@ -109,7 +101,7 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-    console.log("上拉触底，加载更多")
+    // console.log("上拉触底，加载更多")
     this.getListInfo()
   },
 
