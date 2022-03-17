@@ -5,7 +5,11 @@
     <!-- <van-tag size="medium" type="primary" custom-class="tag">{{info.mainSort}}</van-tag>
     <van-tag size="medium" type="primary" custom-class="tag">{{info.subSort}}</van-tag> -->
     <view class="tag-wrapper">
-      <van-tag size="medium" type="primary" custom-class="tag">{{info.qType === 0 ? '单选': '多选'}}</van-tag>
+      <view>
+        <van-tag size="medium" type="primary" custom-class="tag">{{info.qType === 0 ? '单选': '多选'}}</van-tag>
+        <van-tag size="medium" type="warning" custom-class="tag">{{info.canSkip ? '可选': '必填'}}</van-tag>
+      </view>
+     
       <view>
         <van-tag size="medium" round type="primary" custom-class="tag">{{info.mainSort}}</van-tag>
         <van-tag size="medium" round type="primary">{{info.subSort}}</van-tag>

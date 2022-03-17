@@ -78,7 +78,7 @@ Component({
       // 单选
       onSingleOptionSelect(e) {
         const { info, index } = this.data
-        this.triggerEvent('selectOption', { qType: 0, questionIndex: index, questionId: info._id, selected: e.detail })
+        this.triggerEvent('selectOption', { qType: 0, questionIndex: index, questionId: info._id, selected: e.detail, canSkip: info.canSkip })
       },
       // 多选
       onMultiOptionSelect(e) {
@@ -88,7 +88,7 @@ Component({
       },
       multiOptionConfirm() {
         const { info, index, multiSelected } = this.data
-        this.triggerEvent('selectOption', { qType: 1, questionIndex: index, questionId: info._id, selected: multiSelected })
+        this.triggerEvent('selectOption', { qType: 1, questionIndex: index, questionId: info._id, selected: multiSelected, canSkip: info.canSkip })
         this.setData({
           multiSelected: []
         })
@@ -120,7 +120,7 @@ Component({
         options.forEach(o => {
           selected.push(o.selected)
         })
-        this.triggerEvent('selectOption', { qType: 2, questionIndex: index, questionId: info._id, selected })
+        this.triggerEvent('selectOption', { qType: 2, questionIndex: index, questionId: info._id, selected, canSkip: info.canSkip })
       },
       // 答题卡页面点击跳转
       handleRecordClick(e) {

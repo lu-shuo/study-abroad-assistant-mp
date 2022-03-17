@@ -106,7 +106,7 @@ Page({
       if (result.data) {
         result.data.fromRecord = true
         wx.navigateTo({
-          url: '/packageCharts/pages/answer/index',
+          url: '/pages/answer/index',
           success: res => {
             // 这里给要打开的页面传递数据.  第一个参数:方法key, 第二个参数:需要传递的数据
             res.eventChannel.emit('setAnswerInfo', {

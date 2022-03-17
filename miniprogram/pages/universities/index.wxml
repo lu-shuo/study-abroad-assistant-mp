@@ -5,7 +5,7 @@
       <view class="left">
         <view class="name">{{item.name}}</view>
         <view class="english-name">{{item.en_name}}</view>
-        <view class="qs">qs排名: {{item.rank}}</view>
+        <view class="qs">{{item.nation}}</view>
       </view>
       <view class="right">
         <image

@@ -225,9 +225,34 @@ Page({
   // isFinish: false-中途退出
   async handleAnswerSubmit() {
     const userInfo = wx.getStorageSync('userInfo')
-    const finishAll = this.data.answers.length === this.data.questionnaireInfo.questions.length - 1
+    // 必选题数量
+    let neededQNum = 0
+    this.data.questionnaireInfo.questions.slice(0, this.data.questionnaireInfo.questions.length - 1).forEach(q => {
+      if (!q.canSkip) {
+        neededQNum++
+      }
+    })
+    // 必选题作答数量
+    let hasAnsweredNeededQ = 0
+    this.data.answers.forEach(a => {
+      if (!a.canSkip) hasAnsweredNeededQ++
+    })
+    const finishAll = hasAnsweredNeededQ === neededQNum
     if (finishAll) {
       const score = this.calculateScore()
+      // 填充跳过的题目答案为空
+      const { answers, questionnaireInfo } = this.data
+      const qTotal = questionnaireInfo.questions.length - 1 // 题目总数
+      questionnaireInfo.questions.slice(0, qTotal).forEach(item => {
+        if (item.canSkip) {
+          answers.splice(item.index, 0, {
+            questionIndex: item.index,
+            questionId: item._id,
+            selected: null
+          })
+        }
+      })
+      this.setData({ answers })
       const pullInfo = {
         userId: userInfo._id,
         questionnaireId: this.data.questionnaireInfo._id,
@@ -236,23 +261,22 @@ Page({
         score,
         isFinish: true
       }  
-      const answerInfo = this.genAnswerInfo(pullInfo)
       await this.pullAnswers(pullInfo)
+      const answerInfo = this.genAnswerInfo(pullInfo)
       this.navigateToAnswer(answerInfo)
     } else {
       // 二次确认
       Dialog.confirm({
         title: '提示',
-        message: '您有题目未做完，确认提交吗？',
+        message: '您有必选题目未做完，确认提交吗？',
         className: 'not-finish-dialog'
       }).then(async () => {
-        // on confirm
+        // 填充未完成题目
         const { answers, questionnaireInfo } = this.data
-        const length = questionnaireInfo.questions.length
-        if (answers.length < length - 1) {
+        const qTotal = questionnaireInfo.questions.length - 1 // 题目总数
+        if (answers.length < qTotal) {
           const hasAnswerIndexList = answers.map(item => item.questionIndex);
-          // 题目未答完，填充答案为空
-          questionnaireInfo.questions.slice(0, length - 1).forEach(item => {
+          questionnaireInfo.questions.slice(0, qTotal).forEach(item => {
             if (!hasAnswerIndexList.includes(item.index)) {
               answers.splice(item.index, 0, {
                 questionIndex: item.index,
@@ -272,8 +296,8 @@ Page({
           score,
           isFinish: false
         }
-        const answerInfo = this.genAnswerInfo(pullInfo)
         await this.pullAnswers(pullInfo)
+        const answerInfo = this.genAnswerInfo(pullInfo)
         this.navigateToAnswer(answerInfo)
       })
       .catch(() => {
@@ -284,151 +308,151 @@ Page({
   // 生成答案页信息
   genAnswerInfo(pullInfo) {
     let result = pullInfo
-    let chartData = {}
-    let bigPointChartData = []
-    let smallPointChartData = []
+    // let chartData = {}
+    // let bigPointChartData = []
+    // let smallPointChartData = []
 
-    let tempObj = {}
+    // let tempObj = {}
 
-    const {answers} = pullInfo
+    // const {answers} = pullInfo
     const {questionnaireInfo} = this.data
     questionnaireInfo.questions = questionnaireInfo.questions.slice(0, questionnaireInfo.questions.length - 1)
-    const {questions} = questionnaireInfo
-    questions.forEach(q => {
-      if (!tempObj[q.mainSort]) {
-        tempObj[q.mainSort] = []
-      }
-    })
-    Object.keys(tempObj).forEach(mainSort => {
-      questions.forEach(q => {
-        if (q.mainSort === mainSort) {
-          if (tempObj[mainSort].length === 0 || !tempObj[mainSort].some(item => item.name === q.subSort)) {
-            tempObj[mainSort].push({
-              name: q.subSort,
-              value: 0
-            })
-          }
-        }
-      })
-    })
+    // const {questions} = questionnaireInfo
+    // questions.forEach(q => {
+    //   if (!tempObj[q.mainSort]) {
+    //     tempObj[q.mainSort] = []
+    //   }
+    // })
+    // Object.keys(tempObj).forEach(mainSort => {
+    //   questions.forEach(q => {
+    //     if (q.mainSort === mainSort) {
+    //       if (tempObj[mainSort].length === 0 || !tempObj[mainSort].some(item => item.name === q.subSort)) {
+    //         tempObj[mainSort].push({
+    //           name: q.subSort,
+    //           value: 0
+    //         })
+    //       }
+    //     }
+    //   })
+    // })
 
-    let bigPointTemp = JSON.parse(JSON.stringify(tempObj))
-    let smallPointTemp = JSON.parse(JSON.stringify(tempObj))
+    // let bigPointTemp = JSON.parse(JSON.stringify(tempObj))
+    // let smallPointTemp = JSON.parse(JSON.stringify(tempObj))
 
-    Object.values(bigPointTemp).forEach(subArray => {
-      subArray.forEach(sub => {
-        const {name} = sub
-        questions.forEach(q => {
-          if (q.subSort === name) {
-            let selected = null, qBigPoint = 0
-            const index = answers.findIndex(a => a.questionId === q._id)
-            if (index !== -1) {
-              selected = answers[index].selected
-            }
-            if (selected !== null) {
-              // 多选(包括正常多选和选择器)
-              if (Array.isArray(selected)) {
-                let tempBigPoint = 0;
-                if (q.qType === 1) {
-                  selected.forEach(s => {
-                    q.options.forEach(option => {
-                      if (option.title === s) {
-                        tempBigPoint += option.bigPoint
-                      }
-                    })
-                  })
-                } else if (q.qType === 2) {
-                  selected.forEach((s, i) => {
-                    tempBigPoint += q.options[i].bigPoint * s
-                  })
-                }
-                if (q.maxBigScore)
-                  tempBigPoint = tempBigPoint <= q.maxBigScore ? tempBigPoint : q.maxBigScore
-                qBigPoint += tempBigPoint
-              } else {
-                q.options.some(option => {
-                  if (option.title === selected) {
-                    qBigPoint = option.bigPoint
-                    return true
-                  }
-                })
-              }
-            } else {
-              qBigPoint = 0
-            }   
-            sub.value += qBigPoint
-          }
-        })
-      })
-    })
+    // Object.values(bigPointTemp).forEach(subArray => {
+    //   subArray.forEach(sub => {
+    //     const {name} = sub
+    //     questions.forEach(q => {
+    //       if (q.subSort === name) {
+    //         let selected = null, qBigPoint = 0
+    //         const index = answers.findIndex(a => a.questionId === q._id)
+    //         if (index !== -1) {
+    //           selected = answers[index].selected
+    //         }
+    //         if (selected !== null) {
+    //           // 多选(包括正常多选和选择器)
+    //           if (Array.isArray(selected)) {
+    //             let tempBigPoint = 0;
+    //             if (q.qType === 1) {
+    //               selected.forEach(s => {
+    //                 q.options.forEach(option => {
+    //                   if (option.title === s) {
+    //                     tempBigPoint += option.bigPoint
+    //                   }
+    //                 })
+    //               })
+    //             } else if (q.qType === 2) {
+    //               selected.forEach((s, i) => {
+    //                 tempBigPoint += q.options[i].bigPoint * s
+    //               })
+    //             }
+    //             if (q.maxBigScore)
+    //               tempBigPoint = tempBigPoint <= q.maxBigScore ? tempBigPoint : q.maxBigScore
+    //             qBigPoint += tempBigPoint
+    //           } else {
+    //             q.options.some(option => {
+    //               if (option.title === selected) {
+    //                 qBigPoint = option.bigPoint
+    //                 return true
+    //               }
+    //             })
+    //           }
+    //         } else {
+    //           qBigPoint = 0
+    //         }   
+    //         sub.value += qBigPoint
+    //       }
+    //     })
+    //   })
+    // })
 
-    Object.values(smallPointTemp).forEach(subArray => {
-      subArray.forEach(sub => {
-        const {name} = sub
-        questions.forEach(q => {
-          if (q.subSort === name) {
-            let selected = null, qSmallPoint = 0
-            const index = answers.findIndex(a => a.questionId === q._id)
-            if (index !== -1) {
-              selected = answers[index].selected
-            }
-            if (selected !== null) {
-              if (Array.isArray(selected)) {
-                let tempSmallPoint = 0
-                if (q.qType === 1) {
-                  selected.forEach(s => {
-                    q.options.forEach(option => {
-                      if (option.title === s) {
-                        tempSmallPoint += option.smallPoint
-                      }
-                    })
-                  })
-                } else if (q.qType === 2) {
-                  selected.forEach((s, i) => {
-                    tempSmallPoint += q.options[i].smallPoint * s
-                  })
-                }
-                if (q.maxSmallScore)
-                  tempSmallPoint = tempSmallPoint <= q.maxSmallScore ? tempSmallPoint : q.maxSmallScore
-                qSmallPoint += tempSmallPoint
-              } else {
-                q.options.some(option => {
-                  if (option.title === selected) {
-                    qSmallPoint = option.smallPoint
-                    return true
-                  }
-                })
-              }
-            } else {
-              qSmallPoint = 0
-            }   
-            sub.value += qSmallPoint
-          }
-        })
-      })
-    })
+    // Object.values(smallPointTemp).forEach(subArray => {
+    //   subArray.forEach(sub => {
+    //     const {name} = sub
+    //     questions.forEach(q => {
+    //       if (q.subSort === name) {
+    //         let selected = null, qSmallPoint = 0
+    //         const index = answers.findIndex(a => a.questionId === q._id)
+    //         if (index !== -1) {
+    //           selected = answers[index].selected
+    //         }
+    //         if (selected !== null) {
+    //           if (Array.isArray(selected)) {
+    //             let tempSmallPoint = 0
+    //             if (q.qType === 1) {
+    //               selected.forEach(s => {
+    //                 q.options.forEach(option => {
+    //                   if (option.title === s) {
+    //                     tempSmallPoint += option.smallPoint
+    //                   }
+    //                 })
+    //               })
+    //             } else if (q.qType === 2) {
+    //               selected.forEach((s, i) => {
+    //                 tempSmallPoint += q.options[i].smallPoint * s
+    //               })
+    //             }
+    //             if (q.maxSmallScore)
+    //               tempSmallPoint = tempSmallPoint <= q.maxSmallScore ? tempSmallPoint : q.maxSmallScore
+    //             qSmallPoint += tempSmallPoint
+    //           } else {
+    //             q.options.some(option => {
+    //               if (option.title === selected) {
+    //                 qSmallPoint = option.smallPoint
+    //                 return true
+    //               }
+    //             })
+    //           }
+    //         } else {
+    //           qSmallPoint = 0
+    //         }   
+    //         sub.value += qSmallPoint
+    //       }
+    //     })
+    //   })
+    // })
 
-    Object.keys(bigPointTemp).forEach(key => {
-      bigPointChartData.push({
-        name: key,
-        children: bigPointTemp[key]
-      })
-    })
+    // Object.keys(bigPointTemp).forEach(key => {
+    //   bigPointChartData.push({
+    //     name: key,
+    //     children: bigPointTemp[key]
+    //   })
+    // })
 
-    Object.keys(smallPointTemp).forEach(key => {
-      smallPointChartData.push({
-        name: key,
-        children: smallPointTemp[key]
-      })
-    })
+    // Object.keys(smallPointTemp).forEach(key => {
+    //   smallPointChartData.push({
+    //     name: key,
+    //     children: smallPointTemp[key]
+    //   })
+    // })
 
-    chartData = {
-      'bigPoint': bigPointChartData,
-      'smallPoint': smallPointChartData
-    }
+    // chartData = {
+    //   'bigPoint': bigPointChartData,
+    //   'smallPoint': smallPointChartData
+    // }
 
     result.questionnaireInfo = questionnaireInfo
-    result.chartData = chartData
+    // result.chartData = chartData
 
     return result
   },
@@ -521,7 +545,7 @@ Page({
   // 跳转答案页
   navigateToAnswer(answerInfo) {
     wx.navigateTo({
-      url: '/packageCharts/pages/answer/index',
+      url: '/pages/answer/index',
       success: res => {
         // 这里给要打开的页面传递数据.  第一个参数:方法key, 第二个参数:需要传递的数据
         res.eventChannel.emit('setAnswerInfo', {
