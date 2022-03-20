@@ -28,5 +28,7 @@ exports.main = async (event, context) => {
       return await record.getAnswerInfo(event, context)
     case 'getUniversityList':
       return await university.getUniversityList(event, context)
+    case 'getSuitableUniversityList':
+      return await university.getSuitableUniversityList(event, context)
   }
 }

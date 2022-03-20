@@ -21,7 +21,7 @@
       >
         <view class="left">
           <view class="name">{{item.questionnaireName}}</view>
-          <view class="score">大分:{{item.score.bigPoint}}<text class="sep">|</text>小分:{{item.score.smallPoint}}</view>
+          <!-- <view class="score">大分:{{item.score.bigPoint}}<text class="sep">|</text>小分:{{item.score.smallPoint}}</view> -->
           <view class="time">{{dateUtil.dateFormat(item.submitTime)}}</view>
         </view>
         <view class="right">

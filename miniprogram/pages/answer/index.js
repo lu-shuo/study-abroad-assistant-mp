@@ -1,11 +1,12 @@
 // pages/answer/index.js
-
+const { requestCloud } = require('../../utils/request')
 Page({
   /**
    * 页面的初始数据
    */
   data: {
     answerInfo: null,
+    universityList: []
   },
   /**
    * 生命周期函数--监听页面加载
@@ -19,6 +20,7 @@ Page({
       this.setData({
         answerInfo
       })
+      this.getSuitableUniversityList()
     })
   },
   /**
@@ -39,4 +41,18 @@ Page({
       url: `/pages/questionnaire/index?from=answer`,
     });
   },
+  async getSuitableUniversityList() {
+    try {
+      const { result } = await requestCloud('studyAbroadAssistant', {
+        type: 'getSuitableUniversityList',
+        bigPoint: this.data.answerInfo.score.bigPoint,
+      })
+      this.setData({
+        universityList: result.data
+      })
+    } catch (error) {
+      console.error(error)
+    }
+   
+  }
 })

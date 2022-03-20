@@ -12,7 +12,7 @@
       </view>
     </view>
   </view>
-  <view class="block">
+  <!-- <view class="block">
     <view class="block-content">
       <view class="row">
         <view>
@@ -24,7 +24,22 @@
         </view>
       </view>
     </view>
-  </view>
-
-  <view class="block"></view>
+  </view> -->
+  <view class="block-content" wx:if="{{universityList.length}}">以下是为您推荐的院校列表：</view>
+  <scroll-view scroll-y="true" class="university-wrapper" wx:if="{{universityList.length}}">
+    <view class="university-cell" wx:for="{{universityList}}" wx:key="_id">
+      <view class="left">
+        <view class="name">{{item.name}}</view>
+        <view class="english-name">{{item.en_name}}</view>
+        <view class="qs">{{item.nation}}</view>
+      </view>
+      <view class="right">
+        <image
+          src="{{'cloud://cloud1-7gd3wdqv58b87401.636c-cloud1-7gd3wdqv58b87401-1307759619/university_new_pics/' + item.name + '.jpg'}}"
+          class="university-icon"
+        ></image>
+      </view>
+    </view>
+  </scroll-view>
+  <view class="block-content" wx:if="{{!universityList.length}}">很抱歉，暂无符合您的分数的可报院校。</view>
 </view>
